@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to Class of '27 Vault</title>
+  <!-- استدعاء خطوط جوجل للخط اليدوي والستايل -->
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Fraunces:ital,opsz,wght@0,9..144,700;0,9..144,900;1,9..144,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="welcome.css">
+</head>
+<body>
+
+  <!-- CINEMATIC VAULT DOORS INTRO -->
+  <div id="welcomeOverlay" class="welcome-overlay active">
+    <!-- الباب الشمال -->
+    <div class="vault-door door-left">
+      <div class="door-texture"></div>
+      <div class="door-handle"></div>
+    </div>
+    
+    <!-- الباب اليمين -->
+    <div class="vault-door door-right">
+      <div class="door-texture"></div>
+      <div class="door-handle"></div>
+    </div>
+
+    <!-- كارت الرسالة في المنتصف -->
+    <div class="welcome-card">
+      <div class="stamp-badge">TOP SECRET · CLASS OF '27</div>
+      
+      <h1 class="welcome-title">Welcome to <span class="highlight">Our Vault</span></h1>
+      
+      <p class="welcome-sub">
+        Before we go our separate ways, I built this space for us — a place to capture every memory, laugh, and milestone from our senior year. Countless hours went into making this happen, just to make sure our story stays alive forever.
+        <br><br>
+        Take a look back, find your moments, and enjoy the ride. 🕵️‍♂️✨
+      </p>
+
+      <div class="welcome-footer">
+        <span class="sign-off">Class of '27 🎓</span>
+        <button id="enterVaultBtn" class="welcome-btn">
+          <span>UNLOCK VAULT</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M7 11V7a5 5 0 0 1 10 0v4M5 11h14v10H5z"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="welcome.js"></script>
+</body>
+</html>
