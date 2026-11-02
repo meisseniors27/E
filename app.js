@@ -135,7 +135,7 @@ addEventListener('keydown', e => {
 });
 
 /* ============ NAVIGATION + PORTAL TRANSITION ============ */
-const screens = ['splash', 'countdown', 'home', 'photos', 'people', 'trips', 'mail'];
+const screens = ['splash', 'countdown', 'home', 'photos', 'randoms', 'people', 'trips', 'mail'];
 let current = 'splash', busy = false, pending = null, depth = 0;
 let tap = { x: innerWidth / 2, y: innerHeight / 2 };
 const hashId = () => { const h = location.hash.slice(1); return screens.includes(h) ? h : null; };
@@ -828,6 +828,7 @@ function onEnter(id) {
   if (id === 'home') { const h = $('#meis'); (window.requestIdleCallback || (f => setTimeout(f, 150)))(() => enhance3D(h, "MEIS'27")); }
   if (id === 'countdown') { tick(); moveRider(true); }
   if (id === 'photos') { initPhotos().then(() => carCtl && carCtl()); }
+  if (id === 'randoms') initRandoms();
   if (id === 'people') initPeople();
   if (id === 'trips') initTrips();
   if (id === 'mail') initMail();
@@ -878,3 +879,43 @@ window.addEventListener('DOMContentLoaded', () => {
     };
   }
 });
+/* ============ RANDOMS SCREEN LOGIC ============ */
+let randomsBuilt = false;
+async function initRandoms() {
+  if (randomsBuilt) return;
+  randomsBuilt = true;
+
+  const grid = $('#randomsGrid');
+  if (!grid) return;
+  grid.replaceChildren();
+
+  const items = [], seen = new Set();
+  (S.randoms || []).forEach(p => { 
+    const f = Array.isArray(p) ? p[0] : p, cap = Array.isArray(p) ? p[1] : ''; 
+    const src = path(f, 'photos'); 
+    seen.add(src); 
+    items.push({ src, cap }); 
+  });
+
+  if (items.length === 0) {
+    grid.append(el('p', { class: 'hand', style: 'color: #FFC83D; font-size: 26px; grid-column: 1/-1; text-align: center;', text: '⏳ Weekly drop incoming... check back soon for fresh ta3feelat!' }));
+    return;
+  }
+
+  items.forEach((it, idx) => {
+    const randomRotate = (Math.random() * 8 - 4).toFixed(1);
+    const card = el('div', { class: 'polaroid-card', style: `--rot: ${randomRotate}deg; cursor: pointer;` },
+      el('div', { class: 'push-pin' }),
+      el('div', { class: 'photo-inner' },
+        el('img', { src: it.src, alt: it.cap || 'Random shot', loading: 'lazy' })
+      ),
+      el('div', { class: 'photo-label', text: it.cap || `DROP #${idx + 1}` })
+    );
+
+    card.onclick = () => {
+      pop();
+      openLB(items, idx);
+    };
+    grid.append(card);
+  });
+}
