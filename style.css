@@ -690,7 +690,7 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   border: 3px solid #FFF;
   box-shadow: 0 10px 25px rgba(255, 200, 61, 0.4);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   opacity: 0;
   transform: translateY(20px);
 }
