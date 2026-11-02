@@ -45,14 +45,9 @@ window.SITE = {
     "Mercury is in retrograde. Allegedly."
   ],
 
-  /* ---------- PHOTOS ----------
-     Easiest way: drop photos into the "photos" folder and name them 1.jpg, 2.jpg, 3.jpg ...
-     (small letters, .jpg). They appear by themselves, no editing needed.
-     Want captions or other file names? List them here, one per line:
-        ["my-photo.jpg", "my caption"],
-  */
-  photos: [
-    // ["beach.jpg", "the day the sand won"],
+/* ---------- RANDOMS (Weekly Drops / Ta3feelat) ---------- */
+  randoms: [
+    // ["photos/random1.jpg", "Pure chaos"],
   ],
 
   /* ---------- THE PEOPLE ----------
