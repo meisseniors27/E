@@ -714,80 +714,108 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
-/* ================= THEATER & TYPEWRITER WELCOME ================= */
-.theater-overlay {
+/* ================= 3D REALISTIC THEATER STAGE ================= */
+.stage-overlay {
   position: fixed;
   inset: 0;
   z-index: 10000;
-  background: rgba(2, 8, 23, 0.95);
-  backdrop-filter: blur(14px);
+  perspective: 1200px; /* بيعمل عمق الـ 3D */
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
   overflow: hidden;
+  background-color: #020617;
   opacity: 1;
-  transition: opacity 0.6s ease 0.8s;
+  transition: opacity 0.5s ease 0.9s;
 }
 
-/* ستائر المسرح الجانبية */
-.theater-curtain {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 50%;
-  background: linear-gradient(135deg, #0A1F4A 0%, #041030 100%);
-  border-bottom: 5px solid #FFC83D;
-  z-index: 2;
-  transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
-}
-
-.left-curtain {
-  left: 0;
-  border-right: 3px solid #A9D6F7;
-  box-shadow: 15px 0 40px rgba(0,0,0,0.9);
-}
-
-.right-curtain {
-  right: 0;
-  border-left: 3px solid #A9D6F7;
-  box-shadow: -15px 0 40px rgba(0,0,0,0.9);
-}
-
-/* حركة فتح الستارة لما تدوس زرار الدخول */
-.theater-overlay.opened .left-curtain {
-  transform: translateX(-100%);
-}
-
-.theater-overlay.opened .right-curtain {
-  transform: translateX(100%);
-}
-
-.theater-overlay.opened {
+.stage-overlay.opened {
   pointer-events: none;
   opacity: 0;
 }
 
-/* كارت المسرح في المنتصف */
+/* ماسورة الستارة فوق */
+.stage-pole {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 14px;
+  background: linear-gradient(to bottom, #111, #444, #111);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.8);
+  z-index: 5;
+}
+
+/* تصميم الستائر الـ 3D الحقيقية */
+.stage-curtain {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 52%;
+  /* لون مخملي ملكي مع تدرجات تدّي إحساس القماش الثقيل */
+  background: linear-gradient(90deg, #1e0308 0%, #4a040e 20%, #880d1e 50%, #4a040e 80%, #1e0308 100%);
+  background-size: 60px 100%;
+  box-shadow: inset 0 0 50px rgba(0,0,0,0.9), 0 0 30px rgba(0,0,0,0.8);
+  z-index: 4;
+  transform-style: preserve-3d;
+  transition: transform 1.3s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+/* طيات القماش (Folds) عشان تبان مجسمة وبارزة 3D */
+.stage-curtain::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.4) 0px,
+    rgba(255, 255, 255, 0.08) 15px,
+    rgba(0, 0, 0, 0.4) 30px
+  );
+  mix-blend-mode: overlay;
+}
+
+.curtain-left {
+  left: -2%;
+  transform-origin: left center;
+  border-right: 4px solid #d4af37; /* خط ذهبي ع الأطراف */
+}
+
+.curtain-right {
+  right: -2%;
+  transform-origin: right center;
+  border-left: 4px solid #d4af37;
+}
+
+/* حركات فتح الستائر 3D (تتطبق وتتفتح لبره وجوه بنعومة) */
+.stage-overlay.opened .curtain-left {
+  transform: translateX(-100%) rotateY(40deg);
+}
+
+.stage-overlay.opened .curtain-right {
+  transform: translateX(100%) rotateY(-40deg);
+}
+
+/* كارت الرسالة في المنتصف (جوة المسرح) */
 .theater-card {
   position: relative;
-  z-index: 3;
-  background: #0A1F4A;
+  z-index: 6;
+  background: rgba(10, 31, 74, 0.96);
   border: 3px solid #A9D6F7;
   border-radius: 26px;
   padding: 36px 28px;
   max-width: 460px;
   width: 100%;
   text-align: center;
-  box-shadow: 0 25px 60px rgba(0,0,0,0.8), 8px 8px 0px #041030;
-  transform: scale(0.9);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.9), 8px 8px 0px #041030;
+  transform: scale(0.85) translateZ(50px);
   opacity: 0;
-  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s forwards;
+  animation: stagePop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s forwards;
 }
 
-@keyframes popIn {
+@keyframes stagePop {
   to {
-    transform: scale(1);
+    transform: scale(1) translateZ(0);
     opacity: 1;
   }
 }
@@ -819,14 +847,14 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   display: block;
 }
 
-/* خط يدوي فخم ومفهوم للكتابة التفاعلية */
+/* الخط اليدوي التفاعلي */
 .welcome-sub {
   font-family: var(--fc, 'Caveat', cursive, sans-serif);
   font-size: 22px;
   color: #E2F1FF;
   line-height: 1.4;
   margin: 0 0 26px;
-  min-height: 110px; /* عشان الارتفاع يفضل ثابت والكتابة بتتكتشف */
+  min-height: 110px;
   text-align: left;
   direction: ltr;
   border-left: 2px solid #FF8FB8;
