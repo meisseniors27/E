@@ -839,51 +839,39 @@ history.replaceState({ id: start, d: 0 }, '', start === 'splash' ? location.path
 if (start !== 'splash') { $('#splash').classList.remove('on'); $('#' + start).classList.add('on'); current = start; onEnter(start); }
 })();
 
-/* ============ CINEMATIC WELCOME OVERLAY (CALM & SMOOTH) ============ */
-function showCinematicWelcome() {
-  if (sessionStorage.getItem('welcomed')) return;
-  sessionStorage.setItem('welcomed', 'true');
+// أنيميشن الستارة والكتابة الحرفية (Typewriter)
+window.addEventListener('DOMContentLoaded', () => {
+  const overlay = document.getElementById('welcomeOverlay');
+  const textContainer = document.getElementById('typewriterText');
+  const closeBtn = document.getElementById('closeWelcomeBtn');
 
-  const overlay = el('div', { class: 'theater-overlay' });
-  const card = el('div', { class: 'theater-card' });
-  
-  const badge = el('div', { class: 'theater-badge', text: '✦ CLASS OF 2027 ARCHIVE ✦' });
-  const textContainer = el('div', { class: 'typewriter-text' });
-  const cursor = el('span', { class: 'cursor' });
-  textContainer.appendChild(cursor);
+  // النص الرايق اللي هيتكتب كأنه خط إيد
+  const messageText = "Before we go our separate ways, I built this space for us — a place to capture every memory, laugh, and milestone from our senior year. Countless hours went into making this happen, just to make sure our story stays alive forever. Enjoy the ride! 🕵️‍♂️✨";
 
-  const enterBtn = el('button', { class: 'enter-btn', text: 'EXPLORE OUR LEGACY ✨' });
-
-  card.append(badge, textContainer, enterBtn);
-  overlay.append(card);
-  document.body.append(overlay);
-
-  const fullText = "Welcome to our vault. 🎓\n\nBefore we turn the final page and say our goodbyes, I wanted to build something unforgettable for us. This space is my personal gift to each one of you—a timeless home for every laugh, every chaotic moment, and every memory we built together.\n\nI poured my heart into crafting this project so our stories live forever.\n\nTake a step inside... let's relive the magic. ✨";
-
-  let index = 0;
-  function typeNextChar() {
-    if (index < fullText.length) {
-      const char = fullText.charAt(index);
-      if (char === '\n') {
-        textContainer.insertBefore(document.createElement('br'), cursor);
-      } else {
-        textContainer.insertBefore(document.createTextNode(char), cursor);
-      }
-      index++;
-      setTimeout(typeNextChar, char === '.' || char === '✨' ? 350 : 38);
+  let i = 0;
+  function typeWriter() {
+    if (i < messageText.length) {
+      textContainer.innerHTML += messageText.charAt(i);
+      i++;
+      setTimeout(typeWriter, 22); // سرعة الكتابة (كل ما قل الرقم كل ما كانت أسرع)
     } else {
-      enterBtn.classList.add('show');
+      // لما الكتابة تخلص، زرار الدخول يظهر بـ Fade-in فخم
+      if (closeBtn) {
+        closeBtn.style.opacity = '1';
+        closeBtn.style.pointerEvents = 'auto';
+      }
     }
   }
 
-  setTimeout(typeNextChar, 800);
+  // تبدأ الكتابة بعد ما الكارت يظهر بثانية
+  if (textContainer) {
+    setTimeout(typeWriter, 900);
+  }
 
-  enterBtn.onclick = () => {
-    overlay.style.transition = 'all 0.8s cubic-bezier(0.7, 0, 0.3, 1)';
-    overlay.style.opacity = '0';
-    overlay.style.transform = 'scale(1.15)';
-    setTimeout(() => overlay.remove(), 800);
-  };
-}
-
-document.addEventListener('DOMContentLoaded', showCinematicWelcome);
+  // لما يدوس على الزرار، الستايتين تفتح يمين وشمال بسينما جامدة
+  if (closeBtn) {
+    closeBtn.onclick = () => {
+      overlay.classList.add('opened');
+    };
+  }
+});
