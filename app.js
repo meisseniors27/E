@@ -838,3 +838,22 @@ const start = hashId() || 'splash';
 history.replaceState({ id: start, d: 0 }, '', start === 'splash' ? location.pathname : '#' + start);
 if (start !== 'splash') { $('#splash').classList.remove('on'); $('#' + start).classList.add('on'); current = start; onEnter(start); }
 })();
+
+// تشغيل رسالة الترحيب التلقائية عند فتح الموقع بالـ Scan
+window.addEventListener('DOMContentLoaded', () => {
+  const overlay = document.getElementById('welcomeOverlay');
+  const closeBtn = document.getElementById('closeWelcomeBtn');
+
+  if (overlay) {
+    // تظهر بعد جزء من الثانية بشكل فخم
+    setTimeout(() => {
+      overlay.classList.add('active');
+    }, 400);
+
+    if (closeBtn) {
+      closeBtn.onclick = () => {
+        overlay.classList.remove('active');
+      };
+    }
+  }
+});
