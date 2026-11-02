@@ -19,23 +19,38 @@
 </head>
 <body>
 <noscript><p style="padding:30px;font:700 20px sans-serif">This site needs JavaScript. Turn it on and come back, legend.</p></noscript>
-<!-- THEATER / STAGE WELCOME OVERLAY -->
-<div id="welcomeOverlay" class="theater-overlay">
-  <div class="theater-curtain left-curtain"></div>
-  <div class="theater-curtain right-curtain"></div>
+<!-- 3D THEATER STAGE WELCOME OVERLAY -->
+<div id="welcomeOverlay" class="stage-overlay">
+  <!-- الستارة الشمال (3D) -->
+  <div class="stage-curtain curtain-left">
+    <div class="curtain-fold"></div>
+    <div class="curtain-fold"></div>
+    <div class="curtain-fold"></div>
+  </div>
+  
+  <!-- الستارة اليمين (3D) -->
+  <div class="stage-curtain curtain-right">
+    <div class="curtain-fold"></div>
+    <div class="curtain-fold"></div>
+    <div class="curtain-fold"></div>
+  </div>
 
+  <!-- حبل أو ماسورة الستارة من فوق -->
+  <div class="stage-pole"></div>
+
+  <!-- كارت الرسالة في المنتصف -->
   <div class="theater-card">
-    <div class="stamp-badge">TOP SECRET · CLASS OF '27</div>
+    <div class="stamp-badge">CREATED BY EYAD · CLASS OF '27</div>
     
     <h1 class="welcome-title">Welcome to <span class="highlight">Our Vault</span></h1>
     
-    <!-- مكان الكلام اللي هيتكتب كأنه بخط الإيد -->
+    <!-- مكان الكتابة اليدوية التفاعلية -->
     <p id="typewriterText" class="welcome-sub"></p>
 
     <div class="theater-footer">
-      <span class="sign-off">Class of '27 🎓</span>
+      <span class="sign-off">By Eyad 🕵️‍♂️✨</span>
       <button id="closeWelcomeBtn" class="theater-btn" style="opacity: 0; pointer-events: none; transition: opacity 0.5s ease;">
-        <span>ENTER VAULT</span>
+        <span>OPEN CURTAIN</span>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </button>
     </div>
