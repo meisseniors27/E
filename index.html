@@ -19,39 +19,29 @@
 </head>
 <body>
 <noscript><p style="padding:30px;font:700 20px sans-serif">This site needs JavaScript. Turn it on and come back, legend.</p></noscript>
-<!-- 3D THEATER STAGE WELCOME OVERLAY -->
+<!-- THEATER STAGE WELCOME OVERLAY -->
 <div id="welcomeOverlay" class="stage-overlay">
-  <!-- الستارة الشمال (3D) -->
-  <div class="stage-curtain curtain-left">
-    <div class="curtain-fold"></div>
-    <div class="curtain-fold"></div>
-    <div class="curtain-fold"></div>
-  </div>
-  
-  <!-- الستارة اليمين (3D) -->
-  <div class="stage-curtain curtain-right">
-    <div class="curtain-fold"></div>
-    <div class="curtain-fold"></div>
-    <div class="curtain-fold"></div>
-  </div>
-
-  <!-- حبل أو ماسورة الستارة من فوق -->
+  <!-- الستائر الـ 3D الهادية -->
+  <div class="stage-curtain curtain-left"></div>
+  <div class="stage-curtain curtain-right"></div>
   <div class="stage-pole"></div>
 
-  <!-- كارت الرسالة في المنتصف -->
-  <div class="theater-card">
-    <div class="stamp-badge">CREATED BY EYAD · CLASS OF '27</div>
+  <!-- كارت الرسالة والتوقيع -->
+  <div id="theaterCard" class="theater-card">
+    <div class="card-tag">CLASS OF '27</div>
     
-    <h1 class="welcome-title">Welcome to <span class="highlight">Our Vault</span></h1>
+    <h1 class="welcome-title">Our Vault</h1>
     
-    <!-- مكان الكتابة اليدوية التفاعلية -->
+    <!-- مكان الكتابة اليدوية الإنجليزية -->
     <p id="typewriterText" class="welcome-sub"></p>
 
     <div class="theater-footer">
-      <span class="sign-off">By Eyad 🕵️‍♂️✨</span>
-      <button id="closeWelcomeBtn" class="theater-btn" style="opacity: 0; pointer-events: none; transition: opacity 0.5s ease;">
-        <span>OPEN CURTAIN</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      <!-- توقيع خفيف بكلمة Eyad بس -->
+      <span class="signature-name">Eyad</span>
+      
+      <button id="closeWelcomeBtn" class="theater-btn">
+        <span>Enter Vault</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </button>
     </div>
   </div>
