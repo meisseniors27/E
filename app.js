@@ -839,23 +839,21 @@ history.replaceState({ id: start, d: 0 }, '', start === 'splash' ? location.path
 if (start !== 'splash') { $('#splash').classList.remove('on'); $('#' + start).classList.add('on'); current = start; onEnter(start); }
 })();
 
-// تشغيل تريجير الستارة والـ Typewriter
 window.addEventListener('DOMContentLoaded', () => {
   const overlay = document.getElementById('welcomeOverlay');
+  const card = document.getElementById('theaterCard');
   const textContainer = document.getElementById('typewriterText');
   const closeBtn = document.getElementById('closeWelcomeBtn');
 
-  // النص الرايق بتاعك باسمك
-  const messageText = "Before we go our separate ways, I built this space for us — a place to capture every memory, laugh, and milestone from our senior year. Countless hours went into making this happen, just to make sure our story stays alive forever. Enjoy the ride!";
+  const messageText = "Before we all head off to our next chapters, I put this space together for us — a place to hold on to our senior year memories, laughs, and moments. Built with effort, just for us. Enjoy the ride!";
 
   let i = 0;
   function typeWriter() {
     if (i < messageText.length) {
       textContainer.innerHTML += messageText.charAt(i);
       i++;
-      setTimeout(typeWriter, 22); // سرعة الكتابة
+      setTimeout(typeWriter, 22);
     } else {
-      // إظهار زرار فتح الستارة لما الكلام يخلص
       if (closeBtn) {
         closeBtn.style.opacity = '1';
         closeBtn.style.pointerEvents = 'auto';
@@ -863,15 +861,19 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // تبدأ الكتابة بعد ظهور الكارت بشوية
   if (textContainer) {
-    setTimeout(typeWriter, 800);
+    setTimeout(typeWriter, 600);
   }
 
-  // لما يدوس على الزرار، الستائر الـ 3D تتفتح يمين وشمال بنعومة
   if (closeBtn) {
     closeBtn.onclick = () => {
-      overlay.classList.add('opened');
+      // 1. اختفاء الكارت والكلام أولاً بنعومة
+      if (card) card.classList.add('fade-out');
+
+      // 2. فتح الستارة براحة وطبيعية
+      setTimeout(() => {
+        overlay.classList.add('opened');
+      }, 400);
     };
   }
 });
