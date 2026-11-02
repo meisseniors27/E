@@ -839,22 +839,3 @@ history.replaceState({ id: start, d: 0 }, '', start === 'splash' ? location.path
 if (start !== 'splash') { $('#splash').classList.remove('on'); $('#' + start).classList.add('on'); current = start; onEnter(start); }
 })();
 
-// أنيميشن فتح أبواب الـ Vault السينمائية
-window.addEventListener('DOMContentLoaded', () => {
-  const overlay = document.getElementById('welcomeOverlay');
-  const closeBtn = document.getElementById('closeWelcomeBtn');
-
-  if (overlay) {
-    // إظهار الكارت بـ Pop-in أول ما يفتحوا
-    setTimeout(() => {
-      overlay.classList.add('active');
-    }, 300);
-
-    if (closeBtn) {
-      closeBtn.onclick = () => {
-        // فتح الأبواب الشمال واليمين للخارج
-        overlay.classList.add('opened');
-      };
-    }
-  }
-});
