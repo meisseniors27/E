@@ -839,23 +839,23 @@ history.replaceState({ id: start, d: 0 }, '', start === 'splash' ? location.path
 if (start !== 'splash') { $('#splash').classList.remove('on'); $('#' + start).classList.add('on'); current = start; onEnter(start); }
 })();
 
-// أنيميشن الستارة والكتابة الحرفية (Typewriter)
+// تشغيل تريجير الستارة والـ Typewriter
 window.addEventListener('DOMContentLoaded', () => {
   const overlay = document.getElementById('welcomeOverlay');
   const textContainer = document.getElementById('typewriterText');
   const closeBtn = document.getElementById('closeWelcomeBtn');
 
-  // النص الرايق اللي هيتكتب كأنه خط إيد
-  const messageText = "Before we go our separate ways, I built this space for us — a place to capture every memory, laugh, and milestone from our senior year. Countless hours went into making this happen, just to make sure our story stays alive forever. Enjoy the ride! 🕵️‍♂️✨";
+  // النص الرايق بتاعك باسمك
+  const messageText = "Before we go our separate ways, I built this space for us — a place to capture every memory, laugh, and milestone from our senior year. Countless hours went into making this happen, just to make sure our story stays alive forever. Enjoy the ride!";
 
   let i = 0;
   function typeWriter() {
     if (i < messageText.length) {
       textContainer.innerHTML += messageText.charAt(i);
       i++;
-      setTimeout(typeWriter, 22); // سرعة الكتابة (كل ما قل الرقم كل ما كانت أسرع)
+      setTimeout(typeWriter, 22); // سرعة الكتابة
     } else {
-      // لما الكتابة تخلص، زرار الدخول يظهر بـ Fade-in فخم
+      // إظهار زرار فتح الستارة لما الكلام يخلص
       if (closeBtn) {
         closeBtn.style.opacity = '1';
         closeBtn.style.pointerEvents = 'auto';
@@ -863,12 +863,12 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // تبدأ الكتابة بعد ما الكارت يظهر بثانية
+  // تبدأ الكتابة بعد ظهور الكارت بشوية
   if (textContainer) {
-    setTimeout(typeWriter, 900);
+    setTimeout(typeWriter, 800);
   }
 
-  // لما يدوس على الزرار، الستايتين تفتح يمين وشمال بسينما جامدة
+  // لما يدوس على الزرار، الستائر الـ 3D تتفتح يمين وشمال بنعومة
   if (closeBtn) {
     closeBtn.onclick = () => {
       overlay.classList.add('opened');
