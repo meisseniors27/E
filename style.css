@@ -714,3 +714,157 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
 }
+/* ================= THEATER & TYPEWRITER WELCOME ================= */
+.theater-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(2, 8, 23, 0.95);
+  backdrop-filter: blur(14px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 0.6s ease 0.8s;
+}
+
+/* ستائر المسرح الجانبية */
+.theater-curtain {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background: linear-gradient(135deg, #0A1F4A 0%, #041030 100%);
+  border-bottom: 5px solid #FFC83D;
+  z-index: 2;
+  transition: transform 1s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.left-curtain {
+  left: 0;
+  border-right: 3px solid #A9D6F7;
+  box-shadow: 15px 0 40px rgba(0,0,0,0.9);
+}
+
+.right-curtain {
+  right: 0;
+  border-left: 3px solid #A9D6F7;
+  box-shadow: -15px 0 40px rgba(0,0,0,0.9);
+}
+
+/* حركة فتح الستارة لما تدوس زرار الدخول */
+.theater-overlay.opened .left-curtain {
+  transform: translateX(-100%);
+}
+
+.theater-overlay.opened .right-curtain {
+  transform: translateX(100%);
+}
+
+.theater-overlay.opened {
+  pointer-events: none;
+  opacity: 0;
+}
+
+/* كارت المسرح في المنتصف */
+.theater-card {
+  position: relative;
+  z-index: 3;
+  background: #0A1F4A;
+  border: 3px solid #A9D6F7;
+  border-radius: 26px;
+  padding: 36px 28px;
+  max-width: 460px;
+  width: 100%;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.8), 8px 8px 0px #041030;
+  transform: scale(0.9);
+  opacity: 0;
+  animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s forwards;
+}
+
+@keyframes popIn {
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.stamp-badge {
+  display: inline-block;
+  background: #FFC83D;
+  color: #041030;
+  font-family: monospace;
+  font-weight: 900;
+  font-size: 11px;
+  letter-spacing: 2px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  transform: rotate(-2deg);
+}
+
+.welcome-title {
+  font-family: var(--fh, Georgia, serif);
+  font-size: clamp(26px, 6vw, 34px);
+  font-weight: 900;
+  color: #fff;
+  margin: 0 0 14px;
+}
+
+.welcome-title .highlight {
+  color: #FFC83D;
+  display: block;
+}
+
+/* خط يدوي فخم ومفهوم للكتابة التفاعلية */
+.welcome-sub {
+  font-family: var(--fc, 'Caveat', cursive, sans-serif);
+  font-size: 22px;
+  color: #E2F1FF;
+  line-height: 1.4;
+  margin: 0 0 26px;
+  min-height: 110px; /* عشان الارتفاع يفضل ثابت والكتابة بتتكتشف */
+  text-align: left;
+  direction: ltr;
+  border-left: 2px solid #FF8FB8;
+  padding-left: 12px;
+}
+
+.theater-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.sign-off {
+  font-family: var(--fc, cursive);
+  font-size: 22px;
+  color: #FFC83D;
+  font-weight: bold;
+}
+
+.theater-btn {
+  background: #FF8FB8;
+  color: #041030;
+  font-weight: 900;
+  font-size: 14px;
+  letter-spacing: 1px;
+  padding: 12px 24px;
+  border-radius: 999px;
+  border: 3px solid #fff;
+  box-shadow: 3px 4px 0px #041030;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.theater-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px #041030;
+}
