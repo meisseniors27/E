@@ -606,6 +606,9 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
 /* استدعاء خط التوقيع الخفيف (Sacramento / Caveat) للـ Signature */
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Sacramento&display=swap');
 
+/* استدعاء خط التوقيع الخفيف (Sacramento) والخط اليدوي (Caveat) */
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Sacramento&display=swap');
+
 /* ================= THEATER STAGE WELCOME ================= */
 .stage-overlay {
   position: fixed;
@@ -743,12 +746,12 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   gap: 15px;
 }
 
-/* توقيع Eyad بخط خفيف وشيك (Signature Font) */
+/* توقيع Eyad Taha بخط خفيف وشيك */
 .signature-name {
   font-family: 'Sacramento', cursive;
-  font-size: 32px;
+  font-size: 34px;
   color: #38bdf8;
-  opacity: 0.9;
+  opacity: 0.95;
   letter-spacing: 1px;
   line-height: 1;
 }
