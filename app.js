@@ -839,20 +839,21 @@ history.replaceState({ id: start, d: 0 }, '', start === 'splash' ? location.path
 if (start !== 'splash') { $('#splash').classList.remove('on'); $('#' + start).classList.add('on'); current = start; onEnter(start); }
 })();
 
-// تشغيل رسالة الترحيب التلقائية عند فتح الموقع بالـ Scan
+// أنيميشن فتح أبواب الـ Vault السينمائية
 window.addEventListener('DOMContentLoaded', () => {
   const overlay = document.getElementById('welcomeOverlay');
   const closeBtn = document.getElementById('closeWelcomeBtn');
 
   if (overlay) {
-    // تظهر بعد جزء من الثانية بشكل فخم
+    // إظهار الكارت بـ Pop-in أول ما يفتحوا
     setTimeout(() => {
       overlay.classList.add('active');
-    }, 400);
+    }, 300);
 
     if (closeBtn) {
       closeBtn.onclick = () => {
-        overlay.classList.remove('active');
+        // فتح الأبواب الشمال واليمين للخارج
+        overlay.classList.add('opened');
       };
     }
   }
