@@ -845,7 +845,8 @@ window.addEventListener('DOMContentLoaded', () => {
   const textContainer = document.getElementById('typewriterText');
   const closeBtn = document.getElementById('closeWelcomeBtn');
 
-  const messageText = "Before we all head off to our next chapters, I put this space together for us — a place to hold on to our senior year memories, laughs, and moments. Built with effort, just for us. Enjoy the ride!";
+  // النص الجديد المظبوط والمحترم
+  const messageText = "Before we go our separate ways, I built this space for us — a place to capture every memory, laugh, and milestone from our previous years. Countless hours went into making this happen, just to make sure our story stays alive forever. Enjoy the ride!";
 
   let i = 0;
   function typeWriter() {
@@ -870,7 +871,7 @@ window.addEventListener('DOMContentLoaded', () => {
       // 1. اختفاء الكارت والكلام أولاً بنعومة
       if (card) card.classList.add('fade-out');
 
-      // 2. فتح الستارة براحة وطبيعية
+      // 2. فتح الستارة براحة وطبيعية بعد الاختفاء
       setTimeout(() => {
         overlay.classList.add('opened');
       }, 400);
