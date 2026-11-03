@@ -29,7 +29,7 @@ window.SITE = {
 
   /* ---------- HOME PAGE ---------- */
   warning: "warning: contains pure legends",
-  bubble: "Yes, we really are graduating.",
+  bubble: "Yes, we are graduating.",
   groupPhoto: "photos/group.jpg",            
   groupCaption: "the whole crew (on a good day)",
   band: ["SCAN. SMILE. REMEMBER.", "STILL HERE, STILL ICONIC", "NO TEACHERS WERE HARMED"],
