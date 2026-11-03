@@ -881,40 +881,35 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 /* ============ RANDOMS SCREEN LOGIC ============ */
 let randomsBuilt = false;
-async function initRandoms() {
-  if (randomsBuilt) return;
+function initRandoms() {
+  if (randomsBuilt) return; 
   randomsBuilt = true;
-
+  
   const grid = $('#randomsGrid');
   if (!grid) return;
   grid.replaceChildren();
 
-  const items = [], seen = new Set();
-  (S.randoms || []).forEach(p => { 
-    const f = Array.isArray(p) ? p[0] : p, cap = Array.isArray(p) ? p[1] : ''; 
-    const src = path(f, 'photos'); 
-    seen.add(src); 
-    items.push({ src, cap }); 
+  const items = [];
+  (S.randoms || []).forEach(p => {
+    const f = Array.isArray(p) ? p[0] : p;
+    const cap = Array.isArray(p) ? p[1] : '';
+    const src = path(f, 'photos');
+    items.push({ src, cap });
   });
 
   if (items.length === 0) {
-    grid.append(el('p', { class: 'hand', style: 'color: #FFC83D; font-size: 26px; grid-column: 1/-1; text-align: center;', text: '⏳ Weekly drop incoming... check back soon for fresh ta3feelat!' }));
+    grid.append(el('p', { class: 'hand', style: 'color: #FFC83D; font-size: 26px; grid-column: 1/-1; text-align: center;', text: '⏳ Weekly drop incoming... check back soon!' }));
     return;
   }
 
-  items.forEach((it, idx) => {
-    const randomRotate = (Math.random() * 8 - 4).toFixed(1);
-    const card = el('div', { class: 'polaroid-card', style: `--rot: ${randomRotate}deg; cursor: pointer;` },
-      el('div', { class: 'push-pin' }),
-      el('div', { class: 'photo-inner' },
-        el('img', { src: it.src, alt: it.cap || 'Random shot', loading: 'lazy' })
-      ),
-      el('div', { class: 'photo-label', text: it.cap || `DROP #${idx + 1}` })
+  items.forEach((it, i) => {
+    const rot = (Math.random() * 6 - 3).toFixed(1);
+    const card = el('div', { class: 'tilt', style: `--rot: ${rot}deg; cursor: pointer;` },
+      polaroid(it.src, it.cap, i)
     );
-
-    card.onclick = () => {
-      pop();
-      openLB(items, idx);
+    card.onclick = () => { 
+      pop(); 
+      openLB(items, i); 
     };
     grid.append(card);
   });
