@@ -115,11 +115,11 @@ padding:11px 14px 11px 34px;border-radius:10px 26px 26px 10px;box-shadow:4px 4px
 .d1{right:6%;top:2px;font-size:34px}
 .d2{right:4%;top:-6px;background:var(--blue);color:var(--navy);font-family:var(--fc);font-size:24px;padding:2px 12px;border-radius:12px;border:3px solid #fff;rotate:12deg}
 .polcol{display:flex;justify-content:center}
-.polwrap{transform-origin:50% 0;animation:swing 5s ease-in-out infinite;width:min(76%,300px);margin:22px auto 0}
+.polwrap{transform-origin:50% 0;animation:swing 5s ease-in-out infinite;width:min(90%,420px);margin:22px auto 0}
 .polwrap .polaroid{rotate:3deg}
-.polaroid{background:#fff;color:var(--navy);padding:12px 12px 14px;box-shadow:8px 10px 0 rgba(0,0,0,.35);position:relative;margin:0}
-.ph{aspect-ratio:4/5;background:#cfe6fa;display:grid;place-items:center;overflow:hidden}
-.ph img{width:100%;height:100%;object-fit:cover;display:block}
+.polaroid{background:#fff;color:var(--navy);padding:12px 12px 28px;box-shadow:8px 10px 0 rgba(0,0,0,.35);position:relative;margin:0}
+.ph{aspect-ratio:auto !important;width:100%;height:auto;background:#cfe6fa;display:block;overflow:hidden}
+.ph img{width:100%;height:auto;object-fit:contain;display:block}
 .polaroid figcaption{font-family:var(--fc);font-weight:700;font-size:24px;text-align:center;padding-top:8px;line-height:1}
 .ph.empty{background:repeating-linear-gradient(45deg,#d7ebfc 0 12px,#c4e0f7 12px 24px);color:var(--navy);text-align:center;padding:12px;align-content:center;gap:6px}
 .ph.empty span{font-size:34px}
