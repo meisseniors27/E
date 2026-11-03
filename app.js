@@ -233,8 +233,6 @@ function initHome() {
   const unit = items.map(t => t + '   ★   ').join('').repeat(3);
   $('#band').append(el('span', { text: unit }), el('span', { text: unit }));
   const ol = $('#rules'); (S.rules || []).forEach(r => ol.append(el('li', { text: r })));
-  $('#excusetxt').textContent = rnd(EXC);
-  $('#excuse').onclick = () => { pop(); $('#excusetxt').textContent = rnd(EXC); };
 }
 initHome();
 
