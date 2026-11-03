@@ -401,16 +401,36 @@ window.addEventListener('DOMContentLoaded', () => {
   const textContainer = document.getElementById('typewriterText');
   const closeBtn = document.getElementById('closeWelcomeBtn');
   const messageText = "Before we go our separate ways, I built this space for us — a place to capture every memory, laugh, and milestone from our previous years. Enjoy the ride!";
+  
   let i = 0;
   function typeWriter() {
-    if (i < messageText.length) { textContainer.innerHTML += messageText.charAt(i); i++; setTimeout(typeWriter, 22); }
-    else if (closeBtn) { closeBtn.style.opacity = '1'; closeBtn.style.pointerEvents = 'auto'; }
+    if (textContainer && i < messageText.length) { 
+      textContainer.innerHTML += messageText.charAt(i); 
+      i++; 
+      setTimeout(typeWriter, 22); 
+    } else {
+      if (closeBtn) { 
+        closeBtn.style.opacity = '1'; 
+        closeBtn.style.pointerEvents = 'auto'; 
+      }
+    }
   }
-  if (textContainer) setTimeout(typeWriter, 600);
+
+  if (textContainer) {
+    setTimeout(typeWriter, 600);
+  } else {
+    if (closeBtn) { 
+      closeBtn.style.opacity = '1'; 
+      closeBtn.style.pointerEvents = 'auto'; 
+    }
+  }
+
   if (closeBtn) {
     closeBtn.onclick = () => {
       if (card) card.classList.add('fade-out');
-      setTimeout(() => { overlay.classList.add('opened'); }, 400);
+      setTimeout(() => { 
+        if (overlay) overlay.classList.add('opened'); 
+      }, 400);
     };
   }
 });
