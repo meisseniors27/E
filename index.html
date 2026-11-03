@@ -19,26 +19,18 @@
 </head>
 <body>
 <noscript><p style="padding:30px;font:700 20px sans-serif">This site needs JavaScript. Turn it on and come back, legend.</p></noscript>
+
 <!-- THEATER STAGE WELCOME OVERLAY -->
 <div id="welcomeOverlay" class="stage-overlay">
-  <!-- الستائر الـ 3D الهادية -->
   <div class="stage-curtain curtain-left"></div>
   <div class="stage-curtain curtain-right"></div>
   <div class="stage-pole"></div>
-
-  <!-- كارت الرسالة والتوقيع -->
   <div id="theaterCard" class="theater-card">
     <div class="card-tag">CLASS OF '27</div>
-    
     <h1 class="welcome-title">Our Vault</h1>
-    
-    <!-- مكان الكتابة اليدوية الإنجليزية -->
     <p id="typewriterText" class="welcome-sub"></p>
-
     <div class="theater-footer">
-      <!-- توقيع خفيف باسم Eyad Taha -->
       <span class="signature-name">Eyad Taha</span>
-      
       <button id="closeWelcomeBtn" class="theater-btn">
         <span>Enter Vault</span>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -46,6 +38,7 @@
     </div>
   </div>
 </div>
+
 <!-- ============ FRONT DOOR ============ -->
 <section class="screen on" id="splash" aria-label="Welcome">
   <div class="splash calm">
@@ -161,30 +154,16 @@
   </div>
 </section>
 
-<!-- ============ PHOTOS ============ -->
-<section class="screen" id="photos" aria-label="Photos">
-  <div class="page">
-    <header class="pagehead"><button class="back" data-back type="button">← back</button></header>
-    <h2 class="title x3d">The Photo Spin</h2>
-    <p class="hand sub">drag it. spin it. don't throw your phone.</p>
-    <div class="car" id="carousel"></div>
-    <div class="carbtns">
-      <button class="sbtn" id="carprev" type="button" aria-label="Previous photo">←</button>
-      <button class="sbtn" id="carnext" type="button" aria-label="Next photo">→</button>
-    </div>
-  </div>
-</section>
 <!-- ============ RANDOMS ============ -->
 <section class="screen" id="randoms" aria-label="Randoms">
   <div class="page">
     <header class="pagehead"><button class="back" data-back type="button">← back</button></header>
     <h2 class="title x3d">Randoms & Drops</h2>
     <p class="hand sub">PURE CHAOS</p>
-
-    <!-- شبكة عرض اللقطات والتغفيلات -->
     <div id="randomsGrid" class="detective-grid" style="margin-top: 24px;"></div>
   </div>
 </section>
+
 <!-- ============ PEOPLE ============ -->
 <section class="screen" id="people" aria-label="Who's Who">
   <div class="page">
@@ -226,7 +205,7 @@
           <select id="to" name="to" required><option value="">calling the post office…</option></select></label>
         <label class="field"><span>Say it. Nicely.</span>
           <textarea name="text" rows="5" maxlength="600" required placeholder="you're a legend because…"></textarea></label>
-              <label class="field"><span>Sign it as… (or stay anonymous)</span>
+        <label class="field"><span>Sign it as… (or stay anonymous)</span>
           <select id="from" name="from"><option value="">a mystery person (anonymous)</option></select></label>
         <input class="hp" name="hp" tabindex="-1" aria-hidden="true" autocomplete="off">
         <button class="go" type="submit" id="sendbtn">Send it 🚀</button>
@@ -242,18 +221,18 @@
           <input name="code" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" required placeholder="• • • • •"></label>
         <button class="go" type="submit" id="readbtn">Open my mailbox 🔑</button>
         <p class="msg" id="readmsg" role="status"></p>
-            <button class="linkbtn" id="gotocodepage" type="button">Change my code 🔐</button>
+        <button class="linkbtn" id="gotocodepage" type="button">Change my code 🔐</button>
       </form>
 
-     <form id="adminform" hidden autocomplete="off">
-     <p class="hand boxhead">Manager door 🛡️</p>
-     <label class="field"><span>Manager code</span>
-       <input name="acode" type="password" inputmode="numeric" maxlength="12" required placeholder="• • • • • •"></label>
-     <button class="go" type="submit" id="adminbtn">Open manager view 🛡️</button>
-     <p class="msg" id="adminmsg" role="status"></p>
-     <button class="linkbtn" id="adminback" type="button">← back</button>
-   </form>
-      <!-- وزود الفورم ده تحت الـ form القديم مباشرة -->
+      <form id="adminform" hidden autocomplete="off">
+        <p class="hand boxhead">Manager door 🛡️</p>
+        <label class="field"><span>Manager code</span>
+          <input name="acode" type="password" inputmode="numeric" maxlength="12" required placeholder="• • • • • •"></label>
+        <button class="go" type="submit" id="adminbtn">Open manager view 🛡️</button>
+        <p class="msg" id="adminmsg" role="status"></p>
+        <button class="linkbtn" id="adminback" type="button">← back</button>
+      </form>
+
       <form id="changecodeform" hidden autocomplete="off">
         <p class="hand boxhead">Change your secret code 🔐</p>
         <label class="field"><span>I am…</span>
