@@ -47,7 +47,7 @@ window.SITE = {
 
   /* ---------- RANDOMS (Weekly Drops / Ta3feelat) ---------- */
   randoms: [
-     ["photos/random1.jpg", "Pure chaos"],
+     ["photos/random1.jpg", ""],
      // ضيف صورك التانية هنا بـ "photos/اسم_الصورة.jpg"
   ],
 
