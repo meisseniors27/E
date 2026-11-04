@@ -77,5 +77,5 @@ window.SITE = {
   ],
 
   /* ---------- SECRET MAIL ---------- */
-  mailApi: "https://script.google.com/macros/s/AKfycbxOLCa7wjYURtW-9iH2skoVqE69WbbDOX0Fxt8ByRwqITdG5PmwxYgTBpAqCgwo7-kC/exec"
+  mailApi: "https://script.google.com/macros/s/AKfycbw2-W1kazqwAKz4f_BOu8JxqZPl7pp5fNFiuh1ucxhnQa1svD_BUNKVpogBZ_nHyEOf/exec"
 };
