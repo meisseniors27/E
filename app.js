@@ -525,16 +525,61 @@ function initMail() {
     };
   }
 
-  // 6. التنقل لتغيير الكود
+ // 6. التنقل وتفعيل نموذج تغيير الكود (Change Code Form) بدون ما يرجعك لبرة
   const gotocodepage = $('#gotocodepage');
-  if (gotocodepage) {
-    gotocodepage.onclick = () => { pop(); $('#readform').hidden = true; $('#changecodeform').hidden = false; };
-  }
   const changecodeback = $('#changecodeback');
-  if (changecodeback) {
-    changecodeback.onclick = () => { pop(); $('#changecodeform').hidden = true; $('#readform').hidden = false; };
+  const changecodeform = $('#changecodeform');
+
+  if (gotocodepage) {
+    gotocodepage.onclick = () => { 
+      pop(); 
+      $('#readform').hidden = true; 
+      $('#changecodeform').hidden = false; 
+    };
   }
-}
+  
+  if (changecodeback) {
+    changecodeback.onclick = () => { 
+      pop(); 
+      $('#changecodeform').hidden = true; 
+      $('#readform').hidden = false; 
+    };
+  }
+
+  if (changecodeform) {
+    changecodeform.onsubmit = async e => {
+      e.preventDefault(); // دي أهم حاجة عشان تمنع الصفحة ترجع لأول خالص!
+      const btn = $('#changecodebtn'), msg = $('#changecodemsg');
+      btn.disabled = true; msg.textContent = 'Updating code...';
+      try {
+        const fd = new FormData(e.target);
+        const res = await post({ 
+          a: 'changecode', 
+          name: fd.get('name'), 
+          oldCode: fd.get('oldCode'), 
+          newCode: fd.get('newCode') 
+        });
+        
+        if (res.ok) {
+          msg.className = 'msg ok';
+          msg.textContent = 'Code changed successfully! 🔐';
+          changecodeform.reset();
+          setTimeout(() => {
+            changecodeform.hidden = true;
+            $('#readform').hidden = false;
+            msg.textContent = '';
+          }, 1500);
+        } else {
+          msg.className = 'msg';
+          msg.textContent = res.error === 'bad' ? 'Wrong old code or name!' : 'Error updating code.';
+        }
+      } catch (err) {
+        msg.className = 'msg';
+        msg.textContent = 'Connection error.';
+      }
+      btn.disabled = false;
+    };
+  }
 function onEnter(id) {
   if (id === 'home') { const h = $('#meis'); enhance3D(h, "MEIS'27"); }
   if (id === 'countdown') { tick(); moveRider(true); }
