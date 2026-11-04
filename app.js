@@ -404,12 +404,52 @@ function initMail() {
     };
   }
 
-  // 3. تفعيل نموذج إرسال الرسائل (Send form)
+// 3. تفعيل نموذج إرسال الرسائل (Send form) مع التحقق من الكود السري للمرسل
   const sendform = $('#sendform');
+  const fromSelect = $('#from');
+  const fromCodeField = $('#fromCodeField');
+
+  if (fromSelect && fromCodeField) {
+    fromSelect.onchange = () => {
+      // لو اختار اسم شخص (مش مجهول)، بنظهرله خانة الكود السري
+      if (fromSelect.value) {
+        fromCodeField.hidden = false;
+        fromCodeField.querySelector('input').required = true;
+      } else {
+        fromCodeField.hidden = true;
+        fromCodeField.querySelector('input').required = false;
+        fromCodeField.querySelector('input').value = '';
+      }
+    };
+  }
+
   if (sendform) {
     sendform.onsubmit = async e => {
       e.preventDefault();
       const btn = $('#sendbtn'), msg = $('#sendmsg');
+      const senderName = fromSelect.value;
+      const senderCode = sendform.querySelector('[name="fromCode"]').value;
+
+      // لو كاتب اسمه، لازم نتحقق الأول إن الكود السري اللي دخله صح عبر السيرفر
+      if (senderName) {
+        btn.disabled = true; msg.textContent = 'Verifying your identity...';
+        try {
+          const checkRes = await post({ a: 'read', name: senderName, code: senderCode });
+          if (!checkRes.ok) {
+            msg.className = 'msg';
+            msg.textContent = '❌ Wrong secret code! You cannot sign as someone else.';
+            btn.disabled = false;
+            return;
+          }
+        } catch (err) {
+          msg.className = 'msg';
+          msg.textContent = 'Connection error during verification.';
+          btn.disabled = false;
+          return;
+        }
+      }
+
+      // لو مفيش مشكلة (أو باعت Anonymous)، نكمل إرسال الرسالة عادي
       btn.disabled = true; msg.textContent = 'Sending...';
       try {
         const fd = new FormData(e.target);
@@ -418,6 +458,7 @@ function initMail() {
           msg.className = 'msg ok';
           msg.textContent = 'Sent successfully! 🚀';
           e.target.reset();
+          fromCodeField.hidden = true; // نخفي خانة الكود تاني بعد الإرسال
           rain();
         } else {
           msg.className = 'msg';
