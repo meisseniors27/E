@@ -670,48 +670,76 @@ if (randomUploadForm) {
   };
 }
 
-// --- Direct Random Photo Upload Logic ---
+// --- Direct Random Photo Upload Logic with Smart Compression ---
 async function uploadDirectImage(input) {
   const msg = document.getElementById('uploadStatusMsg');
   if (!input.files || !input.files[0]) return;
   
   const file = input.files[0];
-  msg.textContent = 'Uploading photo... ⏳';
+  msg.textContent = 'Compressing & Uploading... ⏳';
   msg.style.color = '#fff';
   
   const reader = new FileReader();
-  reader.onload = async function(e) {
-    const base64Data = e.target.result;
-    
-    try {
-      const webAppUrl = "https://script.google.com/macros/s/AKfycbw2-W1kazqwAKz4f_BOu8JxqZPl7pp5fNFiuh1ucxhnQa1svD_BUNKVpogBZ_nHyEOf/exec"; 
+  reader.readAsDataURL(file);
+  reader.onload = function(event) {
+    const img = new Image();
+    img.src = event.target.result;
+    img.onload = async function() {
+      const canvas = document.createElement('canvas');
+      const MAX_WIDTH = 800; // أقصى عرض يضمن جودة عالية ووزن خفيف جداً
+      const MAX_HEIGHT = 800;
+      let width = img.width;
+      let height = img.height;
       
-      if (!webAppUrl) {
-        throw new Error('API URL not found');
-      }
-
-      const response = await fetch(webAppUrl, {
-        method: 'POST',
-        body: JSON.stringify({
-          a: 'upload_direct_photo',
-          photo: base64Data
-        })
-      });
-      
-      const res = await response.json();
-      
-      if (res && res.ok) {
-        msg.textContent = 'Photo uploaded successfully! Waiting for admin approval ✨';
-        msg.style.color = '#76ff03'; 
-        input.value = '';
+      if (width > height) {
+        if (width > MAX_WIDTH) {
+          height *= MAX_WIDTH / width;
+          width = MAX_WIDTH;
+        }
       } else {
-        msg.textContent = 'Upload failed, please try again.';
+        if (height > MAX_HEIGHT) {
+          width *= MAX_HEIGHT / height;
+          height = MAX_HEIGHT;
+        }
+      }
+      
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      
+      // ضغط الصورة لجودة 70% (ممتازة للعين وصاروخية في الرفع)
+      const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+      
+      try {
+        const webAppUrl = "https://script.google.com/macros/s/AKfycbw2-W1kazqwAKz4f_BOu8JxqZPl7pp5fNFiuh1ucxhnQa1svD_BUNKVpogBZ_nHyEOf/exec"; 
+        
+        if (!webAppUrl) {
+          throw new Error('API URL not found');
+        }
+
+        const response = await fetch(webAppUrl, {
+          method: 'POST',
+          body: JSON.stringify({
+            a: 'upload_direct_photo',
+            photo: compressedBase64
+          })
+        });
+        
+        const res = await response.json();
+        
+        if (res && res.ok) {
+          msg.textContent = 'Photo uploaded successfully! Waiting for admin approval ✨';
+          msg.style.color = '#76ff03'; 
+          input.value = '';
+        } else {
+          msg.textContent = 'Upload failed, please try again.';
+          msg.style.color = '#ff5252';
+        }
+      } catch (err) {
+        msg.textContent = 'Server connection error.';
         msg.style.color = '#ff5252';
       }
-    } catch (err)  {
-      msg.textContent = 'Server connection error.';
-      msg.style.color = '#ff5252';
-    }
+    };
   };
-  reader.readAsDataURL(file);
 }
