@@ -786,3 +786,28 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
 .theater-btn:active {
   transform: scale(0.97);
 }
+
+/* =====================================================================
+   تعديل صفحة الـ Randoms لتتأقلم مع أبعاد الصور أوتوماتيكياً بدون قص
+   ===================================================================== */
+#randomsGrid .polaroid-card {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+#randomsGrid .photo-inner {
+  width: 100% !important;
+  aspect-ratio: auto !important; /* بيخلي الفريم يفك المقاس الثابت ويقرا مقاس الصورة الحقيقي */
+  height: auto !important;
+  background: #cfe6fa;
+  overflow: hidden;
+  display: block !important;
+}
+
+#randomsGrid .photo-inner img {
+  width: 100% !important;
+  height: auto !important;
+  object-fit: contain !important; /* بيعرض الصورة بالكامل وبأبعادها الطبيعية بدون أي قص لأطرافها */
+  display: block !important;
+}
