@@ -1,4 +1,4 @@
-/* =====================================================================
+5/* =====================================================================
    MEIS SENIORS '27  -  THE ONLY FILE YOU NEED TO EDIT
    Change the text between the quote marks "like this". Keep the commas.
    Save the file, upload it again, done. (See README.md)
@@ -48,8 +48,15 @@ window.SITE = {
   /* ---------- RANDOMS (Weekly Drops / Ta3feelat) ---------- */
   randoms: [
      ["photos/random1.jpg", ""],
-    // ["photos/random2.jpg", ""],
-   //  ["photos/random3.jpg", ""], 
+     ["photos/random2.jpg", ""],
+     ["photos/random3.jpg", ""], 
+     ["photos/random4.jpg", ""],
+     ["photos/random5.jpg", ""], 
+     ["photos/random6.jpg", ""],  
+     ["photos/random7.jpg", ""],
+     ["photos/random8.jpg", ""],
+     ["photos/random9.jpg", ""],
+     ["photos/random10.jpg", ""],
      // ضيف صورك التانية هنا بـ "photos/اسم_الصورة.jpg"
   ],
 
