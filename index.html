@@ -155,16 +155,16 @@
     <h2 class="title x3d">Randoms & Drops</h2>
     <p class="hand sub">PURE CHAOS</p>
     
-    <!-- زرار الرفع المباشر (باللغة الإنجليزية للموقع) -->
-    <div style="text-align: center; margin: 25px 0;">
-      <label for="quickImageUpload" class="go" style="display: inline-block; cursor: pointer; padding: 12px 24px; border-radius: 8px; background: #222; color: #fff; font-family: inherit; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
-        📁 Upload New Photo 📸
+    <!-- زرار رفع صغير وشيك -->
+    <div style="text-align: center; margin: 15px 0;">
+      <label for="quickImageUpload" style="display: inline-flex; align-items: center; gap: 8px; cursor: pointer; padding: 8px 16px; border-radius: 6px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: #fff; font-family: inherit; font-size: 13px; transition: all 0.2s ease; backdrop-filter: blur(5px);">
+        <span>📷</span> <span>Upload Photo</span>
       </label>
       <input type="file" id="quickImageUpload" accept="image/*" style="display: none;" onchange="uploadDirectImage(this)">
-      <p id="uploadStatusMsg" style="margin-top: 10px; font-size: 14px; font-weight: bold;"></p>
+      <p id="uploadStatusMsg" style="margin-top: 6px; font-size: 12px; opacity: 0.8;"></p>
     </div>
 
-    <div id="randomsGrid" class="detective-grid" style="margin-top: 24px;"></div>
+    <div id="randomsGrid" class="detective-grid" style="margin-top: 20px;"></div>
   </div>
 </section>
 <!-- ============ PEOPLE ============ -->
