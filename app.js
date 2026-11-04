@@ -560,7 +560,7 @@ function initMail() {
           newCode: fd.get('newCode') 
         });
         
-        if (res.ok) {
+  if (res.ok) {
           msg.className = 'msg ok';
           msg.textContent = 'Code changed successfully! 🔐';
           changecodeform.reset();
@@ -580,6 +580,9 @@ function initMail() {
       btn.disabled = false;
     };
   }
+} // <-- القوس ده عشان يقفل changecodeform.onsubmit
+} // <-- القوس ده عشان يقفل دالة initMail() الأساسية
+
 function onEnter(id) {
   if (id === 'home') { const h = $('#meis'); enhance3D(h, "MEIS'27"); }
   if (id === 'countdown') { tick(); moveRider(true); }
