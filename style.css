@@ -162,7 +162,11 @@ padding:11px 14px 11px 34px;border-radius:10px 26px 26px 10px;box-shadow:4px 4px
 .ring3d{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d}
 .cc{position:absolute;width:170px;left:-85px;top:-135px;display:block;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .cc .polaroid{box-shadow:6px 8px 0 rgba(0,0,0,.4)}
-.cc .ph{aspect-ratio:1/1.1}
+
+/* --- التعديل هنا: خليناها auto عشان الفريم يتكيف مع مقاس الصورة فوراً --- */
+.cc .ph{aspect-ratio:auto !important;height:auto;}
+.cc .ph img{width:100%;height:auto;object-fit:contain;display:block;}
+
 .car.flat{height:auto;perspective:none;display:flex;gap:18px;overflow-x:auto;padding:20px 6px 30px;scroll-snap-type:x mandatory;touch-action:auto}
 .car.flat .cc{position:relative;left:0;top:0;flex:0 0 190px;scroll-snap-align:center}
 .car.flat .cc:nth-child(odd) .polaroid{rotate:-3deg}.car.flat .cc:nth-child(even) .polaroid{rotate:3deg}
@@ -170,6 +174,7 @@ padding:11px 14px 11px 34px;border-radius:10px 26px 26px 10px;box-shadow:4px 4px
 .car.flat+.carbtns{display:none}
 .sbtn{width:56px;height:56px;border-radius:50%;background:var(--yellow);color:var(--navy);font-weight:800;font-size:24px;border:3px solid #fff;box-shadow:4px 4px 0 var(--hard)}
 .sbtn:active{translate:3px 3px;box-shadow:1px 1px 0 var(--hard)}
+
 
 /* ---------- people ---------- */
 .search{display:block;max-width:420px}
