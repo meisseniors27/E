@@ -581,7 +581,6 @@ function initMail() {
     };
   }
 } // <-- القوس ده عشان يقفل changecodeform.onsubmit
-} // <-- القوس ده عشان يقفل دالة initMail() الأساسية
 
 function onEnter(id) {
   if (id === 'home') { const h = $('#meis'); enhance3D(h, "MEIS'27"); }
