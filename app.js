@@ -684,7 +684,8 @@ async function uploadDirectImage(input) {
     const base64Data = e.target.result;
     
     try {
-      const webAppUrl = S.mailApi || ''; 
+      const webAppUrl = "https://script.google.com/macros/s/AKfycbw2-W1kazqwAKz4f_BOu8JxqZPl7pp5fNFiuh1ucxhnQa1svD_BUNKVpogBZ_nHyEOf/exec"; 
+      
       if (!webAppUrl) {
         throw new Error('API URL not found');
       }
