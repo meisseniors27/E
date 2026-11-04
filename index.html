@@ -154,6 +154,22 @@
     <header class="pagehead"><button class="back" data-back type="button">← back</button></header>
     <h2 class="title x3d">Randoms & Drops</h2>
     <p class="hand sub">PURE CHAOS</p>
+
+    <!-- نموذج رفع الصور الجديد للناس (يظهر مباشرة في صفحة الراندومز) -->
+    <div class="paper" style="max-width: 480px; margin: 20px auto 30px; text-align: center;">
+      <p class="hand boxhead" style="font-size: 26px;">Share a Random Moment 📸</p>
+      <form id="randomUploadForm">
+        <label class="field" style="text-align: right;"><span>Your Name:</span>
+          <input type="text" name="name" required placeholder="اكتب اسمك هنا...">
+        </label>
+        <label class="field" style="text-align: right;"><span>Direct Image Link (رابط الصورة المباشر):</span>
+          <input type="url" name="photo" required placeholder="حط لينك الصورة المباشر...">
+        </label>
+        <button class="go" type="submit" id="randomUploadBtn" style="width: 100%; margin-top: 10px;">Upload for Approval 🚀</button>
+        <p class="msg" id="randomUploadMsg"></p>
+      </form>
+    </div>
+
     <div id="randomsGrid" class="detective-grid" style="margin-top: 24px;"></div>
   </div>
 </section>
