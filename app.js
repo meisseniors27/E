@@ -376,9 +376,124 @@ function fillSelect(sel, list, ph) { sel.replaceChildren(el('option', { value: '
 let mailBuilt = false;
 function initMail() {
   if (mailBuilt) return; mailBuilt = true;
-  loadNames().then(l => { fillSelect($('#to'), l, 'pick a victim…'); fillSelect($('#who'), l, 'pick your name…'); fillSelect($('#from'), l, 'anonymous'); });
-}
+  
+  // 1. جلب الأسماء للقوائم المنسدلة
+  loadNames().then(l => { 
+    fillSelect($('#to'), l, 'pick a victim…'); 
+    fillSelect($('#who'), l, 'pick your name…'); 
+    fillSelect($('#from'), l, 'anonymous');
+    fillSelect($('#ccname'), l, 'Select your name…');
+  });
 
+  // 2. تفعيل التبويبات (Write one vs My mailbox) بدقة تامة
+  const tabw = $('#tabw'), tabr = $('#tabr'), panelw = $('#panelw'), panelr = $('#panelr');
+  if (tabw && tabr && panelw && panelr) {
+    tabw.onclick = () => { 
+      pop(); 
+      tabw.setAttribute('aria-pressed', 'true'); 
+      tabr.setAttribute('aria-pressed', 'false'); 
+      panelw.hidden = false; 
+      panelr.hidden = true; 
+    };
+    tabr.onclick = () => { 
+      pop(); 
+      tabr.setAttribute('aria-pressed', 'true'); 
+      tabw.setAttribute('aria-pressed', 'false'); 
+      panelr.hidden = false; 
+      panelw.hidden = true; 
+    };
+  }
+
+  // 3. تفعيل نموذج إرسال الرسائل (Send form)
+  const sendform = $('#sendform');
+  if (sendform) {
+    sendform.onsubmit = async e => {
+      e.preventDefault();
+      const btn = $('#sendbtn'), msg = $('#sendmsg');
+      btn.disabled = true; msg.textContent = 'Sending...';
+      try {
+        const fd = new FormData(e.target);
+        const res = await post({ a: 'send', to: fd.get('to'), text: fd.get('text'), from: fd.get('from'), hp: fd.get('hp') });
+        if (res.ok) {
+          msg.className = 'msg ok';
+          msg.textContent = 'Sent successfully! 🚀';
+          e.target.reset();
+          rain();
+        } else {
+          msg.className = 'msg';
+          msg.textContent = res.error === 'empty' ? 'Message cannot be empty.' : 'Error sending. Try again.';
+        }
+      } catch (err) {
+        msg.className = 'msg';
+        msg.textContent = 'Connection error.';
+      }
+      btn.disabled = false;
+    };
+  }
+
+  // 4. تفعيل نموذج فتح البريد (Read form / My mailbox)
+  const readform = $('#readform');
+  if (readform) {
+    readform.onsubmit = async e => {
+      e.preventDefault();
+      const btn = $('#readbtn'), msg = $('#readmsg');
+      btn.disabled = true; msg.textContent = 'Opening...';
+      try {
+        const fd = new FormData(e.target);
+        const res = await post({ a: 'read', name: fd.get('who'), code: fd.get('code') });
+        if (res.ok) {
+          msg.textContent = '';
+          readform.hidden = true;
+          $('#box').hidden = false;
+          $('#boxhead').textContent = `${fd.get('who')}'s mailbox. Eyes only. 👀`;
+          const lettersDiv = $('#letters');
+          lettersDiv.replaceChildren();
+          if (res.messages.length === 0) {
+            lettersDiv.append(el('p', { class: 'hand', text: 'No messages yet. (Quiet in here!)' }));
+          } else {
+            res.messages.forEach(m => {
+              lettersDiv.append(
+                el('div', { class: 'letter' },
+                  el('p', { class: 'txt', text: m.text }),
+                  el('p', { class: 'meta', text: `From: ${m.from || 'Anonymous'} • ${m.when}` })
+                )
+              );
+            });
+          }
+        } else {
+          msg.className = 'msg';
+          msg.textContent = res.error === 'locked' ? 'Too many tries. Wait 10 minutes.' : 'Wrong code or name!';
+        }
+      } catch (err) {
+        msg.className = 'msg';
+        msg.textContent = 'Connection error.';
+      }
+      btn.disabled = false;
+    };
+  }
+
+  // 5. زر قفل صندوق البريد مرة أخرى
+  const lockbtn = $('#lockbtn');
+  if (lockbtn) {
+    lockbtn.onclick = () => {
+      pop();
+      $('#box').hidden = true;
+      const rf = $('#readform');
+      if (rf) { rf.hidden = false; rf.reset(); }
+      $('#readmsg').textContent = '';
+    };
+  }
+
+  // 6. التنقل لتغيير الكود
+  const gotocodepage = $('#gotocodepage');
+  if (gotocodepage) {
+    gotocodepage.onclick = () => { pop(); $('#readform').hidden = true; $('#changecodeform').hidden = false; };
+  }
+  const changecodeback = $('#changecodeback');
+  if (changecodeback) {
+    changecodeback.onclick = () => { pop(); $('#changecodeform').hidden = true; $('#readform').hidden = false; };
+  }
+}
 function onEnter(id) {
   if (id === 'home') { const h = $('#meis'); enhance3D(h, "MEIS'27"); }
   if (id === 'countdown') { tick(); moveRider(true); }
