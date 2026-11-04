@@ -852,3 +852,23 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
   animation: floaty 3s ease-in-out infinite;
 }
+
+/* =====================================================================
+   البصمة النهائية والأيقونية في ظهر كارت إياد تaha
+   ===================================================================== */
+
+/* 1. إخفاء النص القديم من ظهر الكارت */
+.pcard[data-name*="eyad taha"] .face.back figcaption {
+  font-size: 0 !important;
+}
+
+/* 2. وضع العبارة الكاريزماتية بالكلمة الجديدة */
+.pcard[data-name*="eyad taha"] .face.back figcaption::before {
+  content: "the guy who built this universe";
+  display: block;
+  font-family: var(--fc);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--navy);
+  line-height: 1.2;
+}
