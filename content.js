@@ -14,7 +14,7 @@ window.SITE = {
       id: "exam",
       label: "Final Exam",
       date: "2027-07-21T09:00:00",           
-      sub: "until the final exam (we believe in you. a little.)",
+      sub: "until the final exam (a little.)",
       joke: "Every second brings us closer. Also closer to exams. Sorry.",
       done: "The exams are over. Breathe. Hydrate. Never speak of it."
     }
