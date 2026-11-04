@@ -677,29 +677,39 @@ async function uploadDirectImage(input) {
   
   const file = input.files[0];
   msg.textContent = 'Uploading photo... ⏳';
-  msg.style.color = '#333';
+  msg.style.color = '#fff';
   
   const reader = new FileReader();
   reader.onload = async function(e) {
     const base64Data = e.target.result;
     
     try {
-      const res = await post({
-        a: 'upload_direct_photo',
-        photo: base64Data
+      const webAppUrl = S.mailApi || ''; 
+      if (!webAppUrl) {
+        throw new Error('API URL not found');
+      }
+
+      const response = await fetch(webAppUrl, {
+        method: 'POST',
+        body: JSON.stringify({
+          a: 'upload_direct_photo',
+          photo: base64Data
+        })
       });
+      
+      const res = await response.json();
       
       if (res && res.ok) {
         msg.textContent = 'Photo uploaded successfully! Waiting for admin approval ✨';
-        msg.style.color = 'green';
+        msg.style.color = '#76ff03'; 
         input.value = '';
       } else {
         msg.textContent = 'Upload failed, please try again.';
-        msg.style.color = 'red';
+        msg.style.color = '#ff5252';
       }
-    } catch (err) {
+    } catch (err)  {
       msg.textContent = 'Server connection error.';
-      msg.style.color = 'red';
+      msg.style.color = '#ff5252';
     }
   };
   reader.readAsDataURL(file);
