@@ -1,4 +1,4 @@
-5/* =====================================================================
+/* =====================================================================
    MEIS SENIORS '27  -  THE ONLY FILE YOU NEED TO EDIT
    Change the text between the quote marks "like this". Keep the commas.
    Save the file, upload it again, done. (See README.md)
