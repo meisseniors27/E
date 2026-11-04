@@ -48,6 +48,8 @@ window.SITE = {
   /* ---------- RANDOMS (Weekly Drops / Ta3feelat) ---------- */
   randoms: [
      ["photos/random1.jpg", ""],
+    // ["photos/random2.jpg", ""],
+   //  ["photos/random3.jpg", ""], 
      // ضيف صورك التانية هنا بـ "photos/اسم_الصورة.jpg"
   ],
 
