@@ -635,3 +635,37 @@ window.addEventListener('DOMContentLoaded', () => {
     };
   }
 });
+
+// --- كود رفع الصور لصفحة الراندومز ---
+const randomUploadForm = $('#randomUploadForm');
+if (randomUploadForm) {
+  randomUploadForm.onsubmit = async e => {
+    e.preventDefault();
+    const btn = $('#randomUploadBtn');
+    const msg = $('#randomUploadMsg');
+    btn.disabled = true;
+    msg.textContent = 'Uploading...';
+    
+    try {
+      const fd = new FormData(e.target);
+      const res = await post({ 
+        a: 'upload_random', 
+        name: fd.get('name'), 
+        photo: fd.get('photo')
+      });
+      
+      if (res && res.ok) {
+        msg.className = 'msg ok';
+        msg.textContent = 'Uploaded successfully! Waiting for admin approval ✨';
+        randomUploadForm.reset();
+      } else {
+        msg.className = 'msg';
+        msg.textContent = 'Error uploading. Try again.';
+      }
+    } catch (err) {
+      msg.className = 'msg';
+      msg.textContent = 'Connection error.';
+    }
+    btn.disabled = false;
+  };
+}
