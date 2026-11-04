@@ -57,7 +57,6 @@ window.SITE = {
      ["photos/random6.jpg", ""],  
      ["photos/random7.jpg", ""],
      ["photos/random8.jpg", ""],
-     ["photos/random9.jpg", ""],
      ["photos/random10.jpg", ""],
      // ضيف صورك التانية هنا بـ "photos/اسم_الصورة.jpg"
   ],
