@@ -669,3 +669,38 @@ if (randomUploadForm) {
     btn.disabled = false;
   };
 }
+
+// --- Direct Random Photo Upload Logic ---
+async function uploadDirectImage(input) {
+  const msg = document.getElementById('uploadStatusMsg');
+  if (!input.files || !input.files[0]) return;
+  
+  const file = input.files[0];
+  msg.textContent = 'Uploading photo... ⏳';
+  msg.style.color = '#333';
+  
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    const base64Data = e.target.result;
+    
+    try {
+      const res = await post({
+        a: 'upload_direct_photo',
+        photo: base64Data
+      });
+      
+      if (res && res.ok) {
+        msg.textContent = 'Photo uploaded successfully! Waiting for admin approval ✨';
+        msg.style.color = 'green';
+        input.value = '';
+      } else {
+        msg.textContent = 'Upload failed, please try again.';
+        msg.style.color = 'red';
+      }
+    } catch (err) {
+      msg.textContent = 'Server connection error.';
+      msg.style.color = 'red';
+    }
+  };
+  reader.readAsDataURL(file);
+}
