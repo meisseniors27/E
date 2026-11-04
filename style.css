@@ -787,20 +787,39 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   transform: scale(0.97);
 }
 
-/* =====================================================================
-   تعديل صفحة الـ Randoms لتتأقلم مع أبعاد الصور أوتوماتيكياً بدون قص
-   ===================================================================== */
+/* --- لوحة الـ Randoms العشوائية والمرنة بالكامل حسب أبعاد الصورة --- */
+#randomsGrid {
+  display: block;
+  column-width: 220px;
+  column-gap: 24px;
+  padding: 10px;
+}
+
 #randomsGrid .polaroid-card {
+  display: inline-block;
   width: 100%;
-  max-width: 320px;
-  margin: 0 auto;
+  margin-bottom: 24px;
+  break-inside: avoid;
+  background: #fcfbf9;
+  padding: 10px 10px 30px 10px;
+  border-radius: 3px;
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.45);
+  transform: rotate(var(--rot, 0deg));
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0.2s;
+}
+
+#randomsGrid .polaroid-card:hover {
+  transform: scale(1.1) rotate(0deg) !important;
+  z-index: 20;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.6);
 }
 
 #randomsGrid .photo-inner {
   width: 100% !important;
-  aspect-ratio: auto !important; /* بيخلي الفريم يفك المقاس الثابت ويقرا مقاس الصورة الحقيقي */
   height: auto !important;
-  background: #cfe6fa;
+  aspect-ratio: auto !important;
+  background: #111;
   overflow: hidden;
   display: block !important;
 }
@@ -808,6 +827,6 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
 #randomsGrid .photo-inner img {
   width: 100% !important;
   height: auto !important;
-  object-fit: contain !important; /* بيعرض الصورة بالكامل وبأبعادها الطبيعية بدون أي قص لأطرافها */
+  object-fit: contain !important;
   display: block !important;
 }
