@@ -787,40 +787,49 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   transform: scale(0.97);
 }
 
-/* --- لوحة الـ Randoms العشوائية والمرنة بالكامل حسب أبعاد الصورة --- */
+/* ================= RANDOMS GRID RESPONSIVE ================= */
 #randomsGrid {
-  display: block;
-  column-width: 220px;
-  column-gap: 24px;
-  padding: 10px;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)) !important;
+  gap: 18px !important;
+  padding: 10px !important;
+}
+
+@media (min-width: 768px) {
+  #randomsGrid {
+    display: block !important;
+    column-width: 220px !important;
+    column-gap: 24px !important;
+    padding: 10px !important;
+  }
 }
 
 #randomsGrid .polaroid-card {
-  display: inline-block;
-  width: 100%;
-  margin-bottom: 24px;
-  break-inside: avoid;
-  background: #fcfbf9;
-  padding: 10px 10px 30px 10px;
-  border-radius: 3px;
-  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.45);
-  transform: rotate(var(--rot, 0deg));
-  cursor: pointer;
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0.2s;
+  display: inline-block !important;
+  width: 100% !important;
+  margin-bottom: 20px !important;
+  break-inside: avoid !important;
+  background: #fcfbf9 !important;
+  padding: 10px 10px 24px 10px !important;
+  border-radius: 3px !important;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4) !important;
+  transform: rotate(var(--rot, 0deg)) !important;
+  cursor: pointer !important;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), z-index 0.2s !important;
 }
 
 #randomsGrid .polaroid-card:hover {
   transform: scale(1.1) rotate(0deg) !important;
-  z-index: 20;
-  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.6);
+  z-index: 20 !important;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.6) !important;
 }
 
 #randomsGrid .photo-inner {
   width: 100% !important;
   height: auto !important;
   aspect-ratio: auto !important;
-  background: #111;
-  overflow: hidden;
+  background: #111 !important;
+  overflow: hidden !important;
   display: block !important;
 }
 
