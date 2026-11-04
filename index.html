@@ -199,8 +199,12 @@
           <select id="to" name="to" required><option value="">calling the post office…</option></select></label>
         <label class="field"><span>Say it. Nicely.</span>
           <textarea name="text" rows="5" maxlength="600" required placeholder="you're a legend because…"></textarea></label>
-        <label class="field"><span>Sign it as… (or stay anonymous)</span>
-          <select id="from" name="from"><option value="">a mystery person (anonymous)</option></select></label>
+     <label class="field"><span>Sign it as… (or stay anonymous)</span>
+  <select id="from" name="from"><option value="">a mystery person (anonymous)</option></select></label>
+
+<!-- خانة إدخال الكود السري بتظهر فقط لو اخترت اسمك -->
+<label class="field" id="fromCodeField" hidden><span>Enter YOUR secret code (to prove it's really you):</span>
+  <input name="fromCode" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="• • • •"></label>
         <input class="hp" name="hp" tabindex="-1" aria-hidden="true" autocomplete="off">
         <button class="go" type="submit" id="sendbtn">Send it 🚀</button>
         <p class="msg" id="sendmsg" role="status"></p>
