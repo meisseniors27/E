@@ -592,7 +592,6 @@ function onEnter(id) {
 const start = hashId() || 'splash';
 history.replaceState({ id: start, d: 0 }, '', start === 'splash' ? location.pathname : '#' + start);
 if (start !== 'splash') { $('#splash').classList.remove('on'); $('#' + start).classList.add('on'); current = start; onEnter(start); }
-})();
  
 window.addEventListener('DOMContentLoaded', () => {
   const overlay = document.getElementById('welcomeOverlay');
@@ -781,3 +780,5 @@ function compressImage(file) {
     reader.onerror = (error) => reject(error);
   });
 }
+
+})();
