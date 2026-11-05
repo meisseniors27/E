@@ -101,7 +101,7 @@ window.SITE = {
         "trips/WADIDEGLA/19.jpg"
       //  "trips/WADIDEGLA/20.jpg"
       ]
-    }
+    },
 
     // --- قالب لرحلة جديدة (انسخه وعدّل البيانات اللي فيه) ---
   /*  { 
