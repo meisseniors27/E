@@ -10,7 +10,7 @@ const WEAK = (navigator.hardwareConcurrency || 8) <= 2 || (navigator.deviceMemor
 const LITE = REDUCED || WEAK;
 const CAN3D = !!(window.CSS && CSS.supports && CSS.supports('transform-style', 'preserve-3d'));
 if (LITE) root.classList.add('lite');
-
+ 
 function el(tag, attrs = {}, ...kids) {
   const n = document.createElement(tag);
   for (const k in attrs) {
@@ -24,7 +24,7 @@ function el(tag, attrs = {}, ...kids) {
   return n;
 }
 const rnd = a => a[Math.floor(Math.random() * a.length)];
-
+ 
 let soundOn = false, ac;
 function tone(f = 440, d = .08, type = 'sine', vol = .05, slide = 0) {
   if (!soundOn) return;
@@ -39,7 +39,7 @@ function tone(f = 440, d = .08, type = 'sine', vol = .05, slide = 0) {
 }
 const pop = () => tone(520, .09, 'triangle', .06, 300);
 const whoosh = () => tone(180, .5, 'sawtooth', .03, 900);
-
+ 
 let tt;
 function toast(msg) {
   const t = $('#toast'); t.textContent = msg; t.classList.add('show');
@@ -54,14 +54,14 @@ function rain(list = ['🎓', '🎉', '✨', '🧢', '💙', '💛'], n = 36) {
     fx.append(s); setTimeout(() => s.remove(), 5400);
   }
 }
-
+ 
 let raf = 0;
 function setM(x, y) {
   if (raf) return;
   raf = requestAnimationFrame(() => { raf = 0; root.style.setProperty('--mx', x.toFixed(3)); root.style.setProperty('--my', y.toFixed(3)); });
 }
 if (!REDUCED) addEventListener('pointermove', e => setM((e.clientX / innerWidth - .5) * 2, (e.clientY / innerHeight - .5) * 2), { passive: true });
-
+ 
 function enhance3D(h, text, n = 14) {
   if (h.dataset.on || LITE || !CAN3D) return;
   h.dataset.on = '1';
@@ -73,7 +73,7 @@ function enhance3D(h, text, n = 14) {
   h.append(el('span', { class: 'stack', 'aria-hidden': 'true' }, wob));
   h.classList.add('enh');
 }
-
+ 
 const EMPTY = ['photo coming soon', 'someone was blinking', 'our best side is still loading', 'tape is ready, photo is not', 'the photographer is stuck in traffic'];
 function emptyFill(ph, i, txt) {
   ph.classList.add('empty'); ph.classList.remove('init');
@@ -91,7 +91,7 @@ function polaroid(src, cap, i) {
   return el('figure', { class: 'polaroid' }, el('i', { class: 'tape', 'aria-hidden': 'true' }), ph, cap ? el('figcaption', { text: cap }) : null);
 }
 const path = (f, dir) => (/^(https?:)?\/\//.test(f) || f.includes('/')) ? f : dir + '/' + f;
-
+ 
 let lbList = [], lbI = 0;
 function renderLB() {
   const it = lbList[lbI]; $('#lbimg').src = it.src; $('#lbimg').alt = it.cap || ''; $('#lbcap').textContent = it.cap || '';
@@ -103,11 +103,11 @@ $('#lbclose').onclick = closeLB;
 $('#lb').addEventListener('click', e => { if (e.target.id === 'lb') closeLB(); });
 $('#lbprev').onclick = () => { lbI = (lbI - 1 + lbList.length) % lbList.length; renderLB(); };
 $('#lbnext').onclick = () => { lbI = (lbI + 1) % lbList.length; renderLB(); };
-
+ 
 const screens = ['splash', 'countdown', 'home', 'randoms', 'people', 'trips', 'mail'];
 let current = 'splash', busy = false, pending = null, depth = 0;
 const hashId = () => { const h = location.hash.slice(1); return screens.includes(h) ? h : null; };
-
+ 
 function portal(cur, nxt) {
   const fx = $('#fx'), D = 900, E = 'cubic-bezier(.7,0,.2,1)';
   const half = side => {
@@ -131,7 +131,7 @@ function portal(cur, nxt) {
   nxt.animate([{ transform: 'scale(1.12)' }, { transform: 'none' }], { duration: D + 200, delay: 240, easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'backwards' });
   return Promise.all([a1.finished, a2.finished]).catch(() => {}).then(() => [slit, L, R, seam].forEach(n => n.remove()));
 }
-
+ 
 function show(id) {
   if (id === current) return;
   if (busy) { pending = id; return; }
@@ -161,14 +161,14 @@ document.addEventListener('click', e => {
   e.preventDefault(); if (busy) return;
   pop(); if (b.dataset.go) navigate(b.dataset.go); else goBack();
 });
-
+ 
 let mt = 0;
 document.addEventListener('click', e => {
   const m = e.target.closest('[data-m]'); if (!m) return;
   pop(); m.classList.remove('wiggle'); void m.offsetWidth; m.classList.add('wiggle');
   if (++mt >= 5) { mt = 0; rain(); toast('Congratulations, you found the confetti.'); }
 });
-
+ 
 (function initSplash() {
   const w = S.welcome;
   const t = (Array.isArray(w) ? w[w.length - 1] : w) || 'Welcome in the home of our memories';
@@ -180,7 +180,7 @@ document.addEventListener('click', e => {
   else setTimeout(() => { let i = 0; const iv = setInterval(() => { $('#l5t').textContent = t.slice(0, ++i); if (i >= t.length) clearInterval(iv); }, 36); }, 1000);
   enhance3D($('#logo3d'), "MEIS'27", 16);
 })();
-
+ 
 const CDS = (S.countdowns && S.countdowns.length) ? S.countdowns : [{ id: 'grad', label: 'Graduation Day', date: '2027-07-21T18:00:00', sub: '', joke: '', done: '' }];
 const START = new Date(S.startDate || '2026-09-12T08:00:00');
 let mode = CDS[CDS.length - 1].id, last = {};
@@ -220,7 +220,7 @@ function setMode(id, animate) {
   CDS.forEach(c => tabs.append(el('button', { class: 'tabbtn', type: 'button', 'data-id': c.id, text: c.label, 'aria-pressed': 'false', onclick: () => { pop(); setMode(c.id, true); } })));
   setMode(mode, false); setInterval(tick, 1000);
 })();
-
+ 
 let homeBuilt = false;
 const EXC = S.excuses || ['My alarm went off.'];
 function initHome() {
@@ -235,7 +235,7 @@ function initHome() {
   const ol = $('#rules'); (S.rules || []).forEach(r => ol.append(el('li', { text: r })));
 }
 initHome();
-
+ 
 /* ============ RANDOMS SCREEN LOGIC ============ */
 let randomsBuilt = false;
 function initRandoms() {
@@ -245,7 +245,7 @@ function initRandoms() {
   const grid = $('#randomsGrid');
   if (!grid) return;
   grid.replaceChildren();
-
+ 
   const items = [];
   (S.randoms || []).forEach(p => {
     const f = Array.isArray(p) ? p[0] : (typeof p === 'string' ? p : '');
@@ -254,12 +254,12 @@ function initRandoms() {
     const src = path(f, 'photos');
     items.push({ src, cap });
   });
-
+ 
   if (items.length === 0) {
     grid.append(el('p', { class: 'hand', style: 'color: #FFC83D; font-size: 26px; grid-column: 1/-1; text-align: center;', text: '⏳ Weekly drop incoming... check back soon!' }));
     return;
   }
-
+ 
   items.forEach((it, i) => {
     const rot = (Math.random() * 6 - 3).toFixed(1);
     const card = el('div', { class: 'polaroid-card tilt', style: `--rot: ${rot}deg; cursor: pointer;` },
@@ -273,7 +273,7 @@ function initRandoms() {
     grid.append(card);
   });
 }
-
+ 
 /* ============ PEOPLE ============ */
 let peopleBuilt = false;
 function convertDriveLink(url) {
@@ -286,7 +286,7 @@ function initPeople() {
   if (peopleBuilt) return; peopleBuilt = true;
   const grid = $('#pgrid');
   grid.innerHTML = '<p class="hand">Loading legends...</p>';
-
+ 
   fetch('data.json')
     .then(res => res.json())
     .then(data => {
@@ -303,7 +303,7 @@ function initPeople() {
         else emptyFill(fph, i, 'photo soon');
         if (p.baby) { bph.style.backgroundImage = `url('${p.baby}')`; bph.style.backgroundSize = 'cover'; bph.style.backgroundPosition = 'center'; }
         else emptyFill(bph, i, 'baby photo 🍼');
-
+ 
         const first = p.name ? p.name.split(/\s+/)[0] : '';
         const front = el('div', { class: 'face front' }, el('figure', { class: 'polaroid' }, fph, el('figcaption', { text: p.name })));
         const back = el('div', { class: 'face back' }, el('figure', { class: 'polaroid' }, bph, el('figcaption', { text: 'Little ' + first })));
@@ -313,7 +313,7 @@ function initPeople() {
       });
     }).catch(() => { grid.innerHTML = '<p class="hand">Failed to load legends.</p>'; });
 }
-
+ 
 /* ============ TRIPS ============ */
 let tripsBuilt = false;
 function initTrips() {
@@ -331,7 +331,7 @@ function initTrips() {
     box.append(el('div', { class: 'stop' }, el('span', { class: 'pinm', text: '📍' }), ticket));
   });
 }
-
+ 
 function openWallOfFame(title, photos) {
   let modal = $('#wall-modal');
   if (!modal) {
@@ -356,7 +356,7 @@ function openWallOfFame(title, photos) {
   modal.classList.add('active');
 }
 function closeWallOfFame() { const m = $('#wall-modal'); if (m) m.classList.remove('active'); }
-
+ 
 /* ============ MAIL ============ */
 const api = () => (S.mailApi || '').trim();
 let names = null;
@@ -372,7 +372,7 @@ async function loadNames() {
   return names = list;
 }
 function fillSelect(sel, list, ph) { sel.replaceChildren(el('option', { value: '', text: ph }), ...list.map(n => el('option', { value: n, text: n }))); }
-
+ 
 let mailBuilt = false;
 function initMail() {
   if (mailBuilt) return; mailBuilt = true;
@@ -384,7 +384,7 @@ function initMail() {
     fillSelect($('#from'), l, 'anonymous');
     fillSelect($('#ccname'), l, 'Select your name…');
   });
-
+ 
   // 2. تفعيل التبويبات (Write one vs My mailbox) بدقة تامة
   const tabw = $('#tabw'), tabr = $('#tabr'), panelw = $('#panelw'), panelr = $('#panelr');
   if (tabw && tabr && panelw && panelr) {
@@ -403,12 +403,12 @@ function initMail() {
       panelw.hidden = true; 
     };
   }
-
+ 
 // 3. تفعيل نموذج إرسال الرسائل (Send form) مع التحقق من الكود السري للمرسل
   const sendform = $('#sendform');
   const fromSelect = $('#from');
   const fromCodeField = $('#fromCodeField');
-
+ 
   if (fromSelect && fromCodeField) {
     fromSelect.onchange = () => {
       // لو اختار اسم شخص (مش مجهول)، بنظهرله خانة الكود السري
@@ -422,14 +422,14 @@ function initMail() {
       }
     };
   }
-
+ 
   if (sendform) {
     sendform.onsubmit = async e => {
       e.preventDefault();
       const btn = $('#sendbtn'), msg = $('#sendmsg');
       const senderName = fromSelect.value;
       const senderCode = sendform.querySelector('[name="fromCode"]').value;
-
+ 
       // لو كاتب اسمه، لازم نتحقق الأول إن الكود السري اللي دخله صح عبر السيرفر
       if (senderName) {
         btn.disabled = true; msg.textContent = 'Verifying your identity...';
@@ -448,7 +448,7 @@ function initMail() {
           return;
         }
       }
-
+ 
       // لو مفيش مشكلة (أو باعت Anonymous)، نكمل إرسال الرسالة عادي
       btn.disabled = true; msg.textContent = 'Sending...';
       try {
@@ -471,7 +471,7 @@ function initMail() {
       btn.disabled = false;
     };
   }
-
+ 
   // 4. تفعيل نموذج فتح البريد (Read form / My mailbox)
   const readform = $('#readform');
   if (readform) {
@@ -512,7 +512,7 @@ function initMail() {
       btn.disabled = false;
     };
   }
-
+ 
   // 5. زر قفل صندوق البريد مرة أخرى
   const lockbtn = $('#lockbtn');
   if (lockbtn) {
@@ -524,12 +524,12 @@ function initMail() {
       $('#readmsg').textContent = '';
     };
   }
-
+ 
  // 6. التنقل وتفعيل نموذج تغيير الكود (Change Code Form) بدون ما يرجعك لبرة
   const gotocodepage = $('#gotocodepage');
   const changecodeback = $('#changecodeback');
   const changecodeform = $('#changecodeform');
-
+ 
   if (gotocodepage) {
     gotocodepage.onclick = () => { 
       pop(); 
@@ -545,7 +545,7 @@ function initMail() {
       $('#readform').hidden = false; 
     };
   }
-
+ 
   if (changecodeform) {
     changecodeform.onsubmit = async e => {
       e.preventDefault(); // دي أهم حاجة عشان تمنع الصفحة ترجع لأول خالص!
@@ -581,7 +581,7 @@ function initMail() {
     };
   }
 } // <-- القوس ده عشان يقفل changecodeform.onsubmit
-
+ 
 function onEnter(id) {
   if (id === 'home') { const h = $('#meis'); enhance3D(h, "MEIS'27"); }
   if (id === 'countdown') { tick(); moveRider(true); }
@@ -590,52 +590,78 @@ function onEnter(id) {
   if (id === 'trips') initTrips();
   if (id === 'mail') initMail();
 }
-
+ 
 const start = hashId() || 'splash';
 history.replaceState({ id: start, d: 0 }, '', start === 'splash' ? location.pathname : '#' + start);
 if (start !== 'splash') { $('#splash').classList.remove('on'); $('#' + start).classList.add('on'); current = start; onEnter(start); }
 })();
-
+ 
 window.addEventListener('DOMContentLoaded', () => {
   const overlay = document.getElementById('welcomeOverlay');
   const card = document.getElementById('theaterCard');
   const textContainer = document.getElementById('typewriterText');
   const closeBtn = document.getElementById('closeWelcomeBtn');
+  const status = document.getElementById('vaultStatus');
+  const svg = document.getElementById('vaultSvg');
   const messageText = "Before we go our separate ways, I built this space for us — a place to capture every memory, laugh, and milestone from our previous years. Enjoy the ride!";
-  
+ 
+  // ---- draw the vault door ----
+  if (svg) {
+    let s = '<defs><linearGradient id="vst" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6c7fe0"/><stop offset="1" stop-color="#1a2257"/></linearGradient>'
+      + '<radialGradient id="vpl" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#2a3678"/><stop offset="1" stop-color="#0b1034"/></radialGradient></defs>'
+      + '<circle cx="200" cy="200" r="196" fill="none" stroke="url(#vst)" stroke-width="7"/><circle class="v-glow" cx="200" cy="200" r="204"/>';
+    for (let i = 0; i < 12; i++) s += '<g transform="rotate(' + (i * 30) + ' 200 200)"><rect class="v-bolt" x="189" y="-8" width="22" height="40" rx="6" fill="url(#vst)" stroke="#8fa2ff" stroke-opacity=".5"/></g>';
+    s += '<circle cx="200" cy="200" r="170" fill="url(#vpl)" stroke="#3a4a9a" stroke-width="4"/><circle cx="200" cy="200" r="150" fill="none" stroke="#26317a" stroke-width="2"/>';
+    for (let i = 0; i < 60; i++) s += '<line x1="200" y1="56" x2="200" y2="' + (i % 5 ? 62 : 70) + '" stroke="#6f84ff" stroke-opacity=".55" transform="rotate(' + (i * 6) + ' 200 200)"/>';
+    s += '<g class="v-wheel"><circle cx="200" cy="200" r="62" fill="none" stroke="url(#vst)" stroke-width="9"/>';
+    for (let i = 0; i < 6; i++) s += '<g transform="rotate(' + (i * 60) + ' 200 200)"><line x1="200" y1="200" x2="200" y2="104" stroke="url(#vst)" stroke-width="9" stroke-linecap="round"/><circle cx="200" cy="100" r="12" fill="url(#vst)" stroke="#a9b8ff" stroke-opacity=".6"/></g>';
+    s += '<circle cx="200" cy="200" r="26" fill="url(#vst)" stroke="#a9b8ff" stroke-opacity=".6" stroke-width="2"/><circle cx="200" cy="200" r="9" fill="#0b1034"/></g>';
+    svg.innerHTML = s;
+  }
+ 
+  // ---- typewriter (unchanged) ----
   let i = 0;
   function typeWriter() {
-    if (textContainer && i < messageText.length) { 
-      textContainer.innerHTML += messageText.charAt(i); 
-      i++; 
-      setTimeout(typeWriter, 22); 
+    if (textContainer && i < messageText.length) {
+      textContainer.innerHTML += messageText.charAt(i);
+      i++;
+      setTimeout(typeWriter, 22);
     } else {
-      if (closeBtn) { 
-        closeBtn.style.opacity = '1'; 
-        closeBtn.style.pointerEvents = 'auto'; 
+      if (closeBtn) {
+        closeBtn.style.opacity = '1';
+        closeBtn.style.pointerEvents = 'auto';
       }
     }
   }
-
   if (textContainer) {
-    setTimeout(typeWriter, 600);
+    setTimeout(typeWriter, 1800);
   } else {
-    if (closeBtn) { 
-      closeBtn.style.opacity = '1'; 
-      closeBtn.style.pointerEvents = 'auto'; 
+    if (closeBtn) {
+      closeBtn.style.opacity = '1';
+      closeBtn.style.pointerEvents = 'auto';
     }
   }
-
+ 
+  // ---- unlock -> swing open -> reveal the site ----
   if (closeBtn) {
     closeBtn.onclick = () => {
+      if (!overlay || overlay.classList.contains('unlock')) return;
       if (card) card.classList.add('fade-out');
-      setTimeout(() => { 
-        if (overlay) overlay.classList.add('opened'); 
-      }, 400);
+      overlay.classList.add('unlock');
+      if (status) status.textContent = '● UNLOCKING…';
+      setTimeout(() => {
+        overlay.classList.add('opened');
+        document.body.classList.add('vault-opening');
+        if (status) status.textContent = '● OPEN';
+      }, 4800);
+      setTimeout(() => {
+        overlay.classList.add('gone');
+        document.body.classList.remove('vault-opening');
+      }, 9400);
     };
   }
 });
-
+ 
 // --- كود رفع الصور لصفحة الراندومز ---
 const randomUploadForm = $('#randomUploadForm');
 if (randomUploadForm) {
@@ -669,7 +695,7 @@ if (randomUploadForm) {
     btn.disabled = false;
   };
 }
-
+ 
 // --- Multi-Photo Direct Random Upload Logic with Smart Compression ---
 async function uploadDirectImage(input) {
   const msg = document.getElementById('uploadStatusMsg');
@@ -716,7 +742,7 @@ async function uploadDirectImage(input) {
     msg.style.color = '#ff5252';
   }
 }
-
+ 
 // دالة مساعدة لضغط الصورة وإرجاعها كـ Base64
 function compressImage(file) {
   return new Promise((resolve, reject) => {
