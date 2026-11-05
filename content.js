@@ -71,10 +71,67 @@ window.SITE = {
     "Karim", "Yassin Nader"
   ],
 
-  /* ---------- TRIPS ---------- */
+ /* ---------- TRIPS ---------- */
   trips: [
-    { name: "WADI DEGLA PROTECTOTATE", date: "2 MAY 2025", note: "Desert dust, endless laughs, and good times", folder: "WADIDEGLA" },
-    { name: "The Big Trip (rename me)",   date: "Month 2027", note: "Nobody remembers the plan. Everybody remembers the snacks.", folder: "big-trip" }
+    // --- الرحلة الأولى: وادي دجلة ---
+    { 
+      name: "WADI DEGLA", 
+      date: "2 MAY 2025", 
+      note: "Desert dust, endless laughs, and good times.", 
+      cover: "trips/WADIDEGLA/cover.jpg",
+      photos: [
+        "trips/WADIDEGLA/1.jpg",
+        "trips/WADIDEGLA/2.jpg",
+        "trips/WADIDEGLA/3.jpg",
+        "trips/WADIDEGLA/4.jpg",
+        "trips/WADIDEGLA/5.jpg",
+        "trips/WADIDEGLA/6.jpg",
+        "trips/WADIDEGLA/7.jpg",
+        "trips/WADIDEGLA/8.jpg",
+        "trips/WADIDEGLA/9.jpg",
+        "trips/WADIDEGLA/10.jpg",
+        "trips/WADIDEGLA/11.jpg",
+        "trips/WADIDEGLA/12.jpg",
+        "trips/WADIDEGLA/13.jpg",
+        "trips/WADIDEGLA/14.jpg",
+        "trips/WADIDEGLA/15.jpg",
+        "trips/WADIDEGLA/16.jpg",
+        "trips/WADIDEGLA/17.jpg",
+        "trips/WADIDEGLA/18.jpg",
+        "trips/WADIDEGLA/19.jpg",
+      //  "trips/WADIDEGLA/20.jpg"
+      ]
+    },
+
+    // --- قالب لرحلة جديدة (انسخه وعدّل البيانات اللي فيه) ---
+  /*  { 
+      name: "اسم الرحلة الجديدة هنا 🚌", 
+      date: "تاريخ الرحلة هنا", 
+      note: "اكتب النوت أو الجملة المضحكة الخاصة بالرحلة هنا", 
+      cover: "trips/اسم_فولدر_الرحلة/cover.jpg",
+      photos: [
+        "trips/اسم_فولدر_الرحلة/1.jpg",
+        "trips/اسم_فولدر_الرحلة/2.jpg",
+        "trips/اسم_فولدر_الرحلة/3.jpg",
+        "trips/اسم_فولدر_الرحلة/4.jpg",
+        "trips/اسم_فولدر_الرحلة/5.jpg",
+        "trips/اسم_فولدر_الرحلة/6.jpg",
+        "trips/اسم_فولدر_الرحلة/7.jpg",
+        "trips/اسم_فولدر_الرحلة/8.jpg",
+        "trips/اسم_فولدر_الرحلة/9.jpg",
+        "trips/اسم_فولدر_الرحلة/10.jpg",
+        "trips/اسم_فولدر_الرحلة/11.jpg",
+        "trips/اسم_فولدر_الرحلة/12.jpg",
+        "trips/اسم_فولدر_الرحلة/13.jpg",
+        "trips/اسم_فولدر_الرحلة/14.jpg",
+        "trips/اسم_فولدر_الرحلة/15.jpg",
+        "trips/اسم_فولدر_الرحلة/16.jpg",
+        "trips/اسم_فولدر_الرحلة/17.jpg",
+        "trips/اسم_فولدر_الرحلة/18.jpg",
+        "trips/اسم_فولدر_الرحلة/19.jpg",
+        "trips/اسم_فولدر_الرحلة/20.jpg"
+      ]
+    }
   ],
 
   /* ---------- SECRET MAIL ---------- */
