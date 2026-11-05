@@ -98,11 +98,91 @@ function renderLB() {
   const multi = lbList.length > 1; $('#lbprev').hidden = !multi; $('#lbnext').hidden = !multi;
 }
 function openLB(list, i) { lbList = list; lbI = i; renderLB(); $('#lb').hidden = false; $('#lbclose').focus(); }
-// Trip photos: opens the lightbox on the trip's photos (prev/next arrows to browse)
+
+// ============ DETECTIVE WALL & TRIPS LOGIC ============
 function openWallOfFame(title, photos) {
   const list = (photos || []).map((src, i) => ({ src, cap: title + ' · ' + (i + 1) + '/' + photos.length }));
-  if (list.length) openLB(list, 0);
+  
+  const existingWall = document.getElementById('detectiveWallOverlay');
+  if (existingWall) existingWall.remove();
+
+  const wallOverlay = el('div', { id: 'detectiveWallOverlay', class: 'detective-board-overlay', style: `
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(5, 8, 15, 0.95); z-index: 99999;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 20px; box-sizing: border-box; overflow-y: auto;
+  ` },
+    el('div', { class: 'detective-board-header', style: 'display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1200px; margin-bottom: 15px;' },
+      el('h2', { style: 'color: #fff; font-size: 22px; margin: 0; font-family: inherit;', text: `🕵️‍♂️ Detective Wall: ${title}` }),
+      el('button', { class: 'detective-close-btn', type: 'button', text: '✕ إغلاق', style: 'background: #e11d48; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold;', onclick: closeDetectiveWall })
+    ),
+    el('div', { class: 'detective-board-container detective-board detective-grid', style: `
+      position: relative; width: 100%; max-width: 1200px; min-height: 70vh;
+      background: #0f172a; border: 2px solid #334155; border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.7); padding: 30px; display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; align-items: center; box-sizing: border-box;
+    ` })
+  );
+
+  const boardContainer = wallOverlay.querySelector('.detective-board-container');
+
+  if (!list.length) {
+    boardContainer.append(el('p', { class: 'hand', style: 'color: #ffc83d; font-size: 24px; text-align: center; width: 100%;', text: '⏳ Photos coming soon for this trip!' }));
+  } else {
+    list.forEach((item, index) => {
+      const isMobile = innerWidth <= 430;
+      const rot = (Math.random() * 16 - 8).toFixed(1);
+      const cardWidth = isMobile ? '110px' : '160px';
+
+      const polaroidCard = el('div', {
+        class: 'polaroid polaroid-card tilt',
+        style: `
+          background: #fff; padding: 8px 8px 20px 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+          border-radius: 3px; transform: rotate(${rot}deg); cursor: pointer; width: ${cardWidth};
+          box-sizing: border-box; transition: transform 0.3s ease, z-index 0.3s ease; position: relative;
+        `
+      },
+        el('i', { class: 'tape', style: 'position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 40px; height: 15px; background: rgba(255,255,255,0.6);', 'aria-hidden': 'true' }),
+        el('div', { class: 'ph', style: 'background: #000; overflow: hidden;' },
+          el('img', { src: item.src, alt: item.cap, loading: 'lazy', style: 'width: 100%; height: auto; object-fit: contain; display: block;' })
+        ),
+        item.cap ? el('figcaption', { style: 'font-size: 11px; color: #1e293b; text-align: center; margin-top: 8px; font-family: inherit;', text: item.cap }) : null
+      );
+
+      polaroidCard.onmouseenter = () => { polaroidCard.style.transform = 'scale(1.2) rotate(0deg)'; polaroidCard.style.zIndex = '9999'; };
+      polaroidCard.onmouseleave = () => { polaroidCard.style.transform = `rotate(${rot}deg)`; polaroidCard.style.zIndex = '1'; };
+
+      polaroidCard.onclick = () => {
+        if (typeof pop === 'function') pop();
+        openLB(list, index);
+      };
+
+      boardContainer.append(polaroidCard);
+    });
+  }
+
+  wallOverlay.addEventListener('click', (e) => {
+    if (e.target === wallOverlay) closeDetectiveWall();
+  });
+
+  const escListener = (e) => {
+    if (e.key === 'Escape') {
+      closeDetectiveWall();
+      removeEventListener('keydown', escListener);
+    }
+  };
+  addEventListener('keydown', escListener);
+
+  document.body.append(wallOverlay);
 }
+
+function closeDetectiveWall() {
+  const wallOverlay = document.getElementById('detectiveWallOverlay');
+  if (wallOverlay) {
+    if (typeof pop === 'function') pop();
+    wallOverlay.remove();
+  }
+}
+
 function closeLB() { $('#lb').hidden = true; $('#lbimg').removeAttribute('src'); }
 $('#lbclose').onclick = closeLB;
 $('#lb').addEventListener('click', e => { if (e.target.id === 'lb') closeLB(); });
@@ -289,7 +369,7 @@ function initRandoms() {
 let peopleBuilt = false;
 function convertDriveLink(url) {
     if (!url) return '';
-    let match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/id=([a-zA-Z0-9_-]+)/);
+    let match = url.match(/\/d\/([a-zA-Z0-9_-]+/) || url.match(/id=([a-zA-Z0-9_-]+)/);
     if (match && match[1]) return `https://lh3.googleusercontent.com/d/${match[1]}`;
     return url;
 }
@@ -333,119 +413,27 @@ function initTrips() {
   box.className = 'route'; box.replaceChildren();
   
   trips.forEach((t, i) => {
-    // جلب صورة الكفر من content.js أو استخدام صورة افتراضية
     const coverImg = t.cover ? path(t.cover, 'photos') : 'https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?q=80&w=600&auto=format&fit=crop';
-    
-    // تصميم كارت الرحلة
-    const ticket = el('div', { class: 'ticket trip-card-cover', style: 'cursor: pointer; overflow: hidden; padding: 0; position: relative;' },
-      el('div', { 
-        class: 'trip-cover-img', 
-        style: `background-image: url('${coverImg}'); height: 160px; background-size: cover; background-position: center;` 
-      }),
-      el('div', { style: 'padding: 16px;' },
-        t.date ? el('span', { class: 'hand', style: 'color: #a9d6f7; font-size: 14px; display: block; margin-bottom: 4px;', text: t.date }) : null,
+    const ticket = el('div', { class: 'ticket', style: 'cursor: pointer;' },
+      el('div', { class: 'tleft' },
+        t.date ? el('span', { class: 'hand', text: t.date }) : null,
         el('h3', { text: t.name }),
-        t.note ? el('p', { text: t.note }) : null,
-        el('p', { class: 'hand', style: 'color: #ffc83d; font-size: 16px; margin-top: 10px;', text: '🔍 Tap to open Detective Wall' })
-      )
+        t.note ? el('p', { text: t.note }) : null
+      ),
+      el('div', { class: 'tright' }, el('span', { class: 'pinm', text: '📍' }))
     );
+    const ph = el('div', { class: 'ph' }); photoFill(ph, t.cover ? path(t.cover, 'photos') : '', i, 'trip photo');
+    const f = el('figure', { class: 'polaroid' }, el('i', { class: 'tape', 'aria-hidden': 'true' }), ph, el('figcaption', { text: t.name }));
     
-    // الحدث عند الضغط على الكارت لفتح حائط الصور بشكل عشوائي وكامل بدون قص
-    ticket.onclick = (e) => {
-      e.stopPropagation();
-      if (typeof pop === 'function') pop();
-      
-      const tripPhotos = (t.photos && t.photos.length) ? t.photos.map(p => path(p, 'photos')) : [coverImg];
-      
-      // التأكد من وجود الدالة أو إنشائها مباشرة هنا لضمان عدم حدوث خطأ
-      if (typeof openWallOfFame === 'function') {
-        openWallOfFame(t.name, tripPhotos);
-      } else {
-        openDetectiveWallCustom(t.name, tripPhotos);
-      }
+    ticket.onclick = f.onclick = () => {
+      pop();
+      const tripPhotos = (t.photos && t.photos.length) ? t.photos.map(p => path(p, 'photos')) : [];
+      openWallOfFame(t.name, tripPhotos);
     };
-    
-    box.append(el('div', { class: 'stop' }, el('span', { class: 'pinm', text: '📍' }, ticket));
+    box.append(el('div', { class: 'stop' }, f, ticket));
   });
 }
-
-// دالة حائط التحقيق (Detective Wall) المخصصة لعرض الصور عشوائياً وكاملة بدون قص
-function openDetectiveWallCustom(title, photosArray) {
-  // إزالة أي حائط قديم لو موجود
-  const existingModal = document.getElementById('custom-det-wall');
-  if (existingModal) existingModal.remove();
-
-  const modal = document.createElement('div');
-  modal.id = 'custom-det-wall';
-  modal.style.cssText = `
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(5, 8, 15, 0.96); z-index: 99999;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    padding: 20px; box-sizing: border-box; overflow: hidden;
-  `;
-
-  const header = document.createElement('div');
-  header.style.cssText = `color: #fff; font-size: 24px; margin-bottom: 15px; font-weight: bold; text-align: center;`;
-  header.textContent = `🕵️‍♂️ Detective Wall: ${title}`;
-
-  const container = document.createElement('div');
-  container.style.cssText = `
-    position: relative; width: 100%; max-width: 1200px; height: 75vh;
-    background: #0f172a; border: 2px solid #334155; border-radius: 12px;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.7); overflow: hidden;
-  `;
-
-  photosArray.forEach((photoSrc, index) => {
-    const card = document.createElement('div');
-    // توزيع عشوائي للمكان على الحائط وزاوية ميل عشوائية
-    const randomLeft = Math.random() * 70; // نسبة مئوية للعرض
-    const randomTop = Math.random() * 65;  // نسبة مئوية للطول
-    const randomRotate = Math.random() * 26 - 13; // زاوية بين -13 و +13 درجة
-
-    card.style.cssText = `
-      position: absolute; left: ${randomLeft}%; top: ${randomTop}%;
-      background: #ffffff; padding: 8px 8px 22px 8px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.6); border-radius: 3px;
-      transform: rotate(${randomRotate}deg); transition: transform 0.3s ease, z-index 0.3s ease;
-      cursor: pointer; width: 150px; box-sizing: border-box;
-    `;
-
-    const img = document.createElement('img');
-    img.src = photoSrc;
-    // أهم نقطة: object-fit: contain لضمان عدم تأثر الصورة وعرضها كاملة بدون قص أي جزء منها
-    img.style.cssText = `
-      width: 100%; height: 130px; object-fit: contain; background: #000; display: block;
-    `;
-
-    card.appendChild(img);
-
-    // تأثير عند الوقوف بالماوس لتكبير الصورة وجعلها في المقدمة
-    card.onmouseenter = () => {
-      card.style.transform = 'scale(1.25) rotate(0deg)';
-      card.style.zIndex = '9999';
-    };
-    card.onmouseleave = () => {
-      card.style.transform = `rotate(${randomRotate}deg)`;
-      card.style.zIndex = '1';
-    };
-
-    container.appendChild(card);
-  });
-
-  const closeBtn = document.createElement('button');
-  closeBtn.textContent = 'إغلاق الحائط ✕';
-  closeBtn.style.cssText = `
-    margin-top: 15px; background: #e11d48; color: white; border: none;
-    padding: 10px 25px; font-size: 16px; border-radius: 8px; cursor: pointer;
-    font-family: inherit; font-weight: bold; box-shadow: 0 4px 12px rgba(225,29,72,0.4);
-  `;
-  closeBtn.onclick = () => modal.remove();
-
-  modal.appendChild(header);
-  modal.appendChild(container);
-  modal.appendChild(closeBtn);
-  document.body.appendChild(modal);
-}
+ 
 /* ============ MAIL ============ */
 const api = () => (S.mailApi || '').trim();
 let names = null;
@@ -466,7 +454,6 @@ let mailBuilt = false;
 function initMail() {
   if (mailBuilt) return; mailBuilt = true;
   
-  // 1. جلب الأسماء للقوائم المنسدلة
   loadNames().then(l => { 
     fillSelect($('#to'), l, 'pick a victim…'); 
     fillSelect($('#who'), l, 'pick your name…'); 
@@ -474,7 +461,6 @@ function initMail() {
     fillSelect($('#ccname'), l, 'Select your name…');
   });
  
-  // 2. تفعيل التبويبات (Write one vs My mailbox) بدقة تامة
   const tabw = $('#tabw'), tabr = $('#tabr'), panelw = $('#panelw'), panelr = $('#panelr');
   if (tabw && tabr && panelw && panelr) {
     tabw.onclick = () => { 
@@ -493,14 +479,12 @@ function initMail() {
     };
   }
  
-// 3. تفعيل نموذج إرسال الرسائل (Send form) مع التحقق من الكود السري للمرسل
   const sendform = $('#sendform');
   const fromSelect = $('#from');
   const fromCodeField = $('#fromCodeField');
  
   if (fromSelect && fromCodeField) {
     fromSelect.onchange = () => {
-      // لو اختار اسم شخص (مش مجهول)، بنظهرله خانة الكود السري
       if (fromSelect.value) {
         fromCodeField.hidden = false;
         fromCodeField.querySelector('input').required = true;
@@ -519,7 +503,6 @@ function initMail() {
       const senderName = fromSelect.value;
       const senderCode = sendform.querySelector('[name="fromCode"]').value;
  
-      // لو كاتب اسمه، لازم نتحقق الأول إن الكود السري اللي دخله صح عبر السيرفر
       if (senderName) {
         btn.disabled = true; msg.textContent = 'Verifying your identity...';
         try {
@@ -538,7 +521,6 @@ function initMail() {
         }
       }
  
-      // لو مفيش مشكلة (أو باعت Anonymous)، نكمل إرسال الرسالة عادي
       btn.disabled = true; msg.textContent = 'Sending...';
       try {
         const fd = new FormData(e.target);
@@ -547,7 +529,7 @@ function initMail() {
           msg.className = 'msg ok';
           msg.textContent = 'Sent successfully! 🚀';
           e.target.reset();
-          fromCodeField.hidden = true; // نخفي خانة الكود تاني بعد الإرسال
+          fromCodeField.hidden = true;
           rain();
         } else {
           msg.className = 'msg';
@@ -561,7 +543,6 @@ function initMail() {
     };
   }
  
-  // 4. تفعيل نموذج فتح البريد (Read form / My mailbox)
   const readform = $('#readform');
   if (readform) {
     readform.onsubmit = async e => {
@@ -602,7 +583,6 @@ function initMail() {
     };
   }
  
-  // 5. زر قفل صندوق البريد مرة أخرى
   const lockbtn = $('#lockbtn');
   if (lockbtn) {
     lockbtn.onclick = () => {
@@ -614,7 +594,6 @@ function initMail() {
     };
   }
  
- // 6. التنقل وتفعيل نموذج تغيير الكود (Change Code Form) بدون ما يرجعك لبرة
   const gotocodepage = $('#gotocodepage');
   const changecodeback = $('#changecodeback');
   const changecodeform = $('#changecodeform');
@@ -637,7 +616,7 @@ function initMail() {
  
   if (changecodeform) {
     changecodeform.onsubmit = async e => {
-      e.preventDefault(); // دي أهم حاجة عشان تمنع الصفحة ترجع لأول خالص!
+      e.preventDefault();
       const btn = $('#changecodebtn'), msg = $('#changecodemsg');
       btn.disabled = true; msg.textContent = 'Updating code...';
       try {
@@ -649,7 +628,7 @@ function initMail() {
           newCode: fd.get('newCode') 
         });
         
-  if (res.ok) {
+        if (res.ok) {
           msg.className = 'msg ok';
           msg.textContent = 'Code changed successfully! 🔐';
           changecodeform.reset();
@@ -669,7 +648,7 @@ function initMail() {
       btn.disabled = false;
     };
   }
-} // <-- القوس ده عشان يقفل changecodeform.onsubmit
+}
  
 function onEnter(id) {
   if (id === 'home') { const h = $('#meis'); enhance3D(h, "MEIS'27"); }
@@ -693,7 +672,6 @@ window.addEventListener('DOMContentLoaded', () => {
   const svg = document.getElementById('vaultSvg');
   const messageText = "Before we go our separate ways, I built this space for us — a place to capture every memory, laugh, and milestone from our previous years. Enjoy the ride!";
  
-  // ---- draw the vault door ----
   if (svg) {
     let s = '<defs><linearGradient id="vst" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6c7fe0"/><stop offset="1" stop-color="#1a2257"/></linearGradient>'
       + '<radialGradient id="vpl" cx=".4" cy=".35" r=".8"><stop offset="0" stop-color="#2a3678"/><stop offset="1" stop-color="#0b1034"/></radialGradient></defs>'
@@ -707,7 +685,6 @@ window.addEventListener('DOMContentLoaded', () => {
     svg.innerHTML = s;
   }
  
-  // ---- typewriter (unchanged) ----
   let i = 0;
   function typeWriter() {
     if (textContainer && i < messageText.length) {
@@ -730,7 +707,6 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }
  
-  // ---- unlock -> swing open -> reveal the site ----
   if (closeBtn) {
     closeBtn.onclick = () => {
       if (!overlay || overlay.classList.contains('unlock')) return;
@@ -750,7 +726,6 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
  
-// --- كود رفع الصور لصفحة الراندومز ---
 const randomUploadForm = $('#randomUploadForm');
 if (randomUploadForm) {
   randomUploadForm.onsubmit = async e => {
@@ -784,7 +759,6 @@ if (randomUploadForm) {
   };
 }
  
-// --- Multi-Photo Direct Random Upload Logic with Smart Compression ---
 async function uploadDirectImage(input) {
   const msg = document.getElementById('uploadStatusMsg');
   if (!input.files || input.files.length === 0) return;
@@ -801,7 +775,6 @@ async function uploadDirectImage(input) {
     
     try {
       const compressedBase64 = await compressImage(file);
-      
       const webAppUrl = "https://script.google.com/macros/s/AKfycbw2-W1kazqwAKz4f_BOu8JxqZPl7pp5fNFiuh1ucxhnQa1svD_BUNKVpogBZ_nHyEOf/exec"; 
       
       const response = await fetch(webAppUrl, {
@@ -831,7 +804,6 @@ async function uploadDirectImage(input) {
   }
 }
  
-// دالة مساعدة لضغط الصورة وإرجاعها كـ Base64
 function compressImage(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -863,8 +835,8 @@ function compressImage(file) {
         const ctx = canvas.getContext('2d');
         ctx.drawImage(img, 0, 0, width, height);
         
-        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-        resolve(compressedBase64);
+        const compressedB64 = canvas.toDataURL('image/jpeg', 0.7);
+        resolve(compressedB64);
       };
       img.onerror = (error) => reject(error);
     };
