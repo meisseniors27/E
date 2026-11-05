@@ -1025,3 +1025,50 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
   animation: floaty 3s ease-in-out infinite;
 }
+/* --- إصلاح تنسيق وترتيب الأقسام الرئيسية في الصفحة الرئيسية --- */
+.menugrid {
+  display: grid;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+@media (min-width: 860px) {
+  .menugrid {
+    grid-template-columns: 1.2fr 0.8fr;
+    align-items: start;
+  }
+}
+
+.menu {
+  display: grid;
+  gap: 20px;
+}
+
+@media (min-width: 620px) {
+  .menu {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ضبط الأزرار الزجاجية الكبيرة للأقسام الأربعة لمنع أي تداخل */
+.bigbtn {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 18px 70px 16px 20px;
+  background: rgba(30, 41, 59, 0.5) !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 10px 30px 0 rgba(0, 0, 0, 0.4) !important;
+  color: #fff !important;
+  position: relative;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.bigbtn:hover {
+  transform: translateY(-4px);
+  background: rgba(30, 41, 59, 0.7) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
