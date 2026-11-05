@@ -19,12 +19,15 @@
 </head>
 <body>
 <noscript><p style="padding:30px;font:700 20px sans-serif">This site needs JavaScript. Turn it on and come back, legend.</p></noscript>
-
-<!-- THEATER STAGE WELCOME OVERLAY -->
-<div id="welcomeOverlay" class="stage-overlay">
-  <div class="stage-curtain curtain-left"></div>
-  <div class="stage-curtain curtain-right"></div>
-  <div class="stage-pole"></div>
+ 
+<!-- VAULT WELCOME OVERLAY -->
+<div id="welcomeOverlay" class="stage-overlay vault-overlay">
+  <div class="vault-light"></div>
+  <div class="vault-door">
+    <i class="v-hinge" style="top:18%"></i><i class="v-hinge" style="bottom:18%"></i>
+    <svg id="vaultSvg" viewBox="0 0 400 400" aria-hidden="true"></svg>
+    <div class="v-shade"></div>
+  </div>
   <div id="theaterCard" class="theater-card">
     <div class="card-tag">CLASS OF '27</div>
     <h1 class="welcome-title">Our Vault</h1>
@@ -37,8 +40,9 @@
       </button>
     </div>
   </div>
+  <div class="vault-status" id="vaultStatus">● LOCKED</div>
 </div>
-
+ 
 <!-- ============ FRONT DOOR ============ -->
 <section class="screen on" id="splash" aria-label="Welcome">
   <div class="splash calm">
@@ -70,7 +74,7 @@
     </nav>
   </div>
 </section>
-
+ 
 <!-- ============ COUNTDOWN ============ -->
 <section class="screen" id="countdown" aria-label="Countdown">
   <div class="page narrow">
@@ -100,7 +104,7 @@
     <p class="hand fin" id="cdfin" hidden>WE DID IT. Go hug somebody.</p>
   </div>
 </section>
-
+ 
 <!-- ============ HOME ============ -->
 <section class="screen" id="home" aria-label="The whole website">
   <div class="page">
@@ -108,7 +112,7 @@
       <button class="back" data-go="splash" type="button">← front door</button>
       <button class="msticker small" data-m type="button" aria-label="Graduation cap sticker"><span aria-hidden="true">🎓</span></button>
     </header>
-
+ 
     <div class="homegrid">
       <div class="hero">
         <p class="warn"><span aria-hidden="true">⚠️</span> <span id="warntxt">warning: contains pure legends</span></p>
@@ -125,9 +129,9 @@
         </div>
       </div>
     </div>
-
+ 
     <div class="band" aria-hidden="true"><div class="track" id="band"></div></div>
-
+ 
     <div class="menugrid">
       <nav class="menu" aria-label="Pages">
        <button class="bigbtn b1" data-go="randoms" type="button"><span class="em" aria-hidden="true">📸</span><b>Randoms</b><small>From the vault: Unhinged & unfiltered</small></button>
@@ -142,7 +146,7 @@
         </div>
       </aside>
     </div>
-
+ 
  <div class="foot">
       <p class="tiny">made with love by EYAD TAHA</p>
     </div>
@@ -163,7 +167,7 @@
       <input type="file" id="quickImageUpload" accept="image/*" multiple style="display: none;" onchange="uploadDirectImage(this)">
       <p id="uploadStatusMsg" style="margin-top: 6px; font-size: 12px; opacity: 0.8;"></p>
     </div>
-
+ 
     <div id="randomsGrid" class="detective-grid" style="margin-top: 20px;"></div>
   </div>
 </section>
@@ -178,7 +182,7 @@
     <p class="hand none" id="pnone" hidden>Nobody found. Suspicious. Check the spelling?</p>
   </div>
 </section>
-
+ 
 <!-- ============ TRIPS ============ -->
 <section class="screen" id="trips" aria-label="Trips">
   <div class="page narrow">
@@ -188,19 +192,19 @@
     <div class="route" id="tripl"></div>
   </div>
 </section>
-
+ 
 <!-- ============ MAIL ============ -->
 <section class="screen" id="mail" aria-label="Secret mail">
   <div class="page narrow">
     <header class="pagehead"><button class="back" data-back type="button">← back</button></header>
     <h2 class="title x3d">Secret Mail</h2>
     <p class="hand sub">shhh. only the right person can read it.</p>
-
+ 
     <div class="tabs">
       <button class="tabbtn" id="tabw" type="button" aria-pressed="true">✍️ Write one</button>
       <button class="tabbtn" id="tabr" type="button" aria-pressed="false">📬 My mailbox</button>
     </div>
-
+ 
     <div class="paper" id="panelw">
       <p class="hand closed" id="mailclosed" hidden>The post office is closed. (The admin hasn't plugged it in yet.)</p>
       <form id="sendform" autocomplete="off">
@@ -210,7 +214,7 @@
           <textarea name="text" rows="5" maxlength="600" required placeholder="you're a legend because…"></textarea></label>
      <label class="field"><span>Sign it as… (or stay anonymous)</span>
   <select id="from" name="from"><option value="">a mystery person (anonymous)</option></select></label>
-
+ 
 <!-- خانة إدخال الكود السري بتظهر فقط لو اخترت اسمك -->
 <label class="field" id="fromCodeField" hidden><span>Enter YOUR secret code (to prove it's really you):</span>
   <input name="fromCode" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="• • • •"></label>
@@ -219,7 +223,7 @@
         <p class="msg" id="sendmsg" role="status"></p>
       </form>
     </div>
-
+ 
     <div class="paper" id="panelr" hidden>
       <form id="readform" autocomplete="off">
         <label class="field"><span>I am…</span>
@@ -230,7 +234,7 @@
         <p class="msg" id="readmsg" role="status"></p>
         <button class="linkbtn" id="gotocodepage" type="button">Change my code 🔐</button>
       </form>
-
+ 
       <form id="adminform" hidden autocomplete="off">
         <p class="hand boxhead">Manager door 🛡️</p>
         <label class="field"><span>Manager code</span>
@@ -239,7 +243,7 @@
         <p class="msg" id="adminmsg" role="status"></p>
         <button class="linkbtn" id="adminback" type="button">← back</button>
       </form>
-
+ 
       <form id="changecodeform" hidden autocomplete="off">
         <p class="hand boxhead">Change your secret code 🔐</p>
         <label class="field"><span>I am…</span>
@@ -252,7 +256,7 @@
         <p class="msg" id="changecodemsg" role="status"></p>
         <button class="linkbtn" id="changecodeback" type="button">← back</button>
       </form>
-
+ 
       <div id="box" hidden>
         <p class="hand boxhead" id="boxhead">Your mailbox. Eyes only. 👀</p>
         <div id="letters"></div>
@@ -261,19 +265,19 @@
     </div>
   </div>
 </section>
-
+ 
 </main>
-
+ 
 <div id="lb" hidden role="dialog" aria-modal="true" aria-label="Photo viewer">
   <button class="lbx" id="lbclose" type="button" aria-label="Close photo">✕</button>
   <button class="lbn l" id="lbprev" type="button" aria-label="Previous photo">←</button>
   <figure><img id="lbimg" alt=""><figcaption id="lbcap"></figcaption></figure>
   <button class="lbn r" id="lbnext" type="button" aria-label="Next photo">→</button>
 </div>
-
+ 
 <div id="toast" role="status" aria-live="polite"></div>
 <div id="fx" aria-hidden="true"></div>
-
+ 
 <script src="content.js"></script>
 <script src="app.js"></script>
 </body>
