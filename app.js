@@ -326,43 +326,35 @@ function initTrips() {
   if (tripsBuilt) return; tripsBuilt = true;
   const box = $('#tripl'), trips = S.trips || [];
   box.className = 'route'; box.replaceChildren();
+  
   trips.forEach((t, i) => {
-    const coverImg = 'https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?q=80&w=600&auto=format&fit=crop';
-    const ticket = el('div', { class: 'ticket tilt', style: 'cursor: pointer;' },
-      el('h3', { text: t.name }),
-      t.note ? el('p', { text: t.note }) : null,
-      el('p', { class: 'hand', style: 'color: #ffc83d; font-size: 18px;', text: '🔍 Tap to open Detective Wall' })
+    // جلب صورة الكفر من content.js أو استخدام صورة افتراضية شيك في حال عدم توفرها
+    const coverImg = t.cover ? path(t.cover, 'photos') : 'https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?q=80&w=600&auto=format&fit=crop';
+    
+    // تصميم كارت الرحلة (صورة الغلاف + التاريخ + الاسم + النوت)
+    const ticket = el('div', { class: 'ticket trip-card-cover tilt', style: 'cursor: pointer; overflow: hidden; padding: 0;' },
+      el('div', { 
+        class: 'trip-cover-img', 
+        style: `background-image: url('${coverImg}'); height: 160px; background-size: cover; background-position: center;` 
+      }),
+      el('div', { style: 'padding: 16px;' },
+        t.date ? el('span', { class: 'hand', style: 'color: #a9d6f7; font-size: 14px; display: block; margin-bottom: 4px;', text: t.date }) : null,
+        el('h3', { text: t.name }),
+        t.note ? el('p', { text: t.note }) : null,
+        el('p', { class: 'hand', style: 'color: #ffc83d; font-size: 16px; margin-top: 10px;', text: '🔍 Tap to open Detective Wall' })
+      )
     );
-    ticket.onclick = () => { pop(); openWallOfFame(t.name, [coverImg]); };
+    
+    // فتح حائط الصور (Detective Wall) بالصور المحددة في content.js عند الضغط
+    ticket.onclick = () => { 
+      pop(); 
+      const tripPhotos = (t.photos && t.photos.length) ? t.photos.map(p => path(p, 'photos')) : [coverImg];
+      openWallOfFame(t.name, tripPhotos); 
+    };
+    
     box.append(el('div', { class: 'stop' }, el('span', { class: 'pinm', text: '📍' }), ticket));
   });
 }
- 
-function openWallOfFame(title, photos) {
-  let modal = $('#wall-modal');
-  if (!modal) {
-    modal = el('div', { id: 'wall-modal', class: 'wall-overlay' },
-      el('button', { class: 'wall-close', type: 'button', onclick: closeWallOfFame }, '✕'),
-      el('div', { class: 'detective-board' },
-        el('div', { class: 'board-header' }, el('h2', { id: 'wall-title', class: 'wall-heading' })),
-        el('div', { id: 'wall-grid', class: 'detective-grid' })
-      )
-    );
-    document.body.append(modal);
-  }
-  $('#wall-title').textContent = title + ' — CASE FILES 📂';
-  const grid = $('#wall-grid'); grid.replaceChildren();
-  photos.forEach((src, idx) => {
-    const card = el('div', { class: 'polaroid-card' },
-      el('div', { class: 'push-pin' }),
-      el('div', { class: 'photo-inner' }, el('img', { src: src }))
-    );
-    grid.append(card);
-  });
-  modal.classList.add('active');
-}
-function closeWallOfFame() { const m = $('#wall-modal'); if (m) m.classList.remove('active'); }
- 
 /* ============ MAIL ============ */
 const api = () => (S.mailApi || '').trim();
 let names = null;
