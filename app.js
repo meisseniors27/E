@@ -203,10 +203,15 @@ function roadProgress() {
 }
 const ROADNOTES = ['we just left the driveway', 'still on the easy part', 'halfway. the snacks are gone', 'the road gets steep', 'nearly there', 'THE FLAG'];
 function moveRider(animate) {
-  const path = $('#roadp'), rider = $('#rider'), len = path.getTotalLength(), p = roadProgress();
+  const path = $('#roadp'), rider = $('#rider');
+  if (!path || !rider) return;
+  const len = path.getTotalLength(), p = roadProgress();
   const pt = path.getPointAtLength(len * p);
   rider.setAttribute('transform', `translate(${pt.x} ${pt.y})`);
-  $('#roadnote').textContent = ROADNOTES[Math.min(ROADNOTES.length - 1, Math.floor(p * ROADNOTES.length))];
+  const roadNoteEl = $('#roadnote');
+  if (roadNoteEl) {
+    roadNoteEl.textContent = ROADNOTES[Math.min(ROADNOTES.length - 1, Math.floor(p * ROADNOTES.length))];
+  }
 }
 function setMode(id, animate) {
   mode = id; const m = modeObj(); last = {};
