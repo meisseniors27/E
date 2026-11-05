@@ -163,7 +163,6 @@ padding:11px 14px 11px 34px;border-radius:10px 26px 26px 10px;box-shadow:4px 4px
 .cc{position:absolute;width:170px;left:-85px;top:-135px;display:block;backface-visibility:hidden;-webkit-backface-visibility:hidden}
 .cc .polaroid{box-shadow:6px 8px 0 rgba(0,0,0,.4)}
 
-/* --- التعديل هنا: خليناها auto عشان الفريم يتكيف مع مقاس الصورة فوراً --- */
 .cc .ph{aspect-ratio:auto !important;height:auto;}
 .cc .ph img{width:100%;height:auto;object-fit:contain;display:block;}
 
@@ -174,7 +173,6 @@ padding:11px 14px 11px 34px;border-radius:10px 26px 26px 10px;box-shadow:4px 4px
 .car.flat+.carbtns{display:none}
 .sbtn{width:56px;height:56px;border-radius:50%;background:var(--yellow);color:var(--navy);font-weight:800;font-size:24px;border:3px solid #fff;box-shadow:4px 4px 0 var(--hard)}
 .sbtn:active{translate:3px 3px;box-shadow:1px 1px 0 var(--hard)}
-
 
 /* ---------- people ---------- */
 .search{display:block;max-width:420px}
@@ -197,7 +195,7 @@ input,select,textarea{width:100%;font:inherit;font-weight:700;padding:12px 14px;
 .ph.init small{font-family:var(--fc);font-weight:700;font-size:20px}
 .none{text-align:center;margin-top:30px}
 
-/* ---------- trips (Perfect Alternating Right & Left) ---------- */
+/* ---------- trips ---------- */
 .route {
   position: relative;
   max-width: 900px;
@@ -205,7 +203,6 @@ input,select,textarea{width:100%;font:inherit;font-weight:700;padding:12px 14px;
   padding: 20px 10px;
 }
 
-/* الخط النقطي في المنتصف تماماً */
 .route::before {
   content: "";
   position: absolute;
@@ -225,7 +222,6 @@ input,select,textarea{width:100%;font:inherit;font-weight:700;padding:12px 14px;
   align-items: center;
 }
 
-/* الكارت الفردي يمين والزوجي شمال مع إعطاء مساحة للخط في المنتصف */
 .stop:nth-child(odd) {
   justify-content: flex-end;
   padding-right: 52%;
@@ -236,7 +232,6 @@ input,select,textarea{width:100%;font:inherit;font-weight:700;padding:12px 14px;
   padding-left: 52%;
 }
 
-/* دبوس الدائرة الصفراء يثبت في المنتصف على الخط بالضبط */
 .pinm {
   position: absolute;
   left: 50%;
@@ -282,7 +277,6 @@ input,select,textarea{width:100%;font:inherit;font-weight:700;padding:12px 14px;
   color: #3b5c93;
 }
 
-/* للشاشات الموبايل الصغيرة تظهر تحت بعضها بشكل طبيعي */
 @media (max-width: 768px) {
   .route {
     padding-left: 40px;
@@ -302,7 +296,6 @@ input,select,textarea{width:100%;font:inherit;font-weight:700;padding:12px 14px;
     transform: none;
   }
 }
-
 
 /* ---------- mail ---------- */
 .tabs{display:flex;gap:10px;margin:14px 0;flex-wrap:wrap}
@@ -436,9 +429,11 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
 @keyframes titlewob{0%,100%{transform:perspective(600px) rotateY(-6deg) rotateX(2deg)}50%{transform:perspective(600px) rotateY(6deg) rotateX(-2deg)}}
 .lite .rg,.lite .cube,.lite .slab,.lite .cdc,.lite .stop,.lite .bigbtn,.lite .title,.lite .fl i{animation:none}
 .lite .tilt{transform:none}
+
 /* ---------- Split Doors page transition ---------- */
 .cutslit{position:absolute;inset:0;background:var(--yellow);will-change:transform,opacity}
 .cutseam{position:absolute;left:50%;top:0;bottom:0;width:6px;margin-left:-3px;background:#fff;box-shadow:0 0 0 3px var(--yellow),0 0 28px 6px rgba(255,200,61,.85);transform-origin:50% 0;will-change:transform}
+
 /* ================= DETECTIVE WALL STYLING ================= */
 .wall-overlay {
   position: fixed;
@@ -461,7 +456,6 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   pointer-events: auto;
 }
 
-/* لوحة الفلين / التحقيقات */
 .detective-board {
   width: 100%;
   max-width: 1000px;
@@ -502,7 +496,6 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
 }
 
-/* شبكة الصور (البولاروايد) */
 .detective-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -510,7 +503,6 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   padding: 10px;
 }
 
-/* كارت البولاروايد المائل */
 .polaroid-card {
   position: relative;
   background: #fcfbf9;
@@ -553,7 +545,6 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   letter-spacing: 1px;
 }
 
-/* دبوس الضغط أحمر اللون فوق كل صورة */
 .push-pin {
   position: absolute;
   top: -10px;
@@ -578,7 +569,6 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   border-radius: 50%;
 }
 
-/* مكبر الصور الداخلي */
 .wall-zoom-overlay {
   position: fixed;
   inset: 0;
@@ -608,10 +598,6 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
 }
 
-/* استدعاء خط التوقيع الخفيف (Sacramento / Caveat) للـ Signature */
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Sacramento&display=swap');
-
-/* استدعاء خط التوقيع الخفيف (Sacramento) والخط اليدوي (Caveat) */
 @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500&family=Sacramento&display=swap');
 
 /* ================= THEATER STAGE WELCOME ================= */
@@ -634,7 +620,6 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   opacity: 0;
 }
 
-/* ماسورة الستارة من فوق */
 .stage-pole {
   position: absolute;
   top: 0;
@@ -646,7 +631,6 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   z-index: 5;
 }
 
-/* الستائر الـ 3D بتصميم ونسيج طبيعي وناعم */
 .stage-curtain {
   position: absolute;
   top: 0;
@@ -691,7 +675,6 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   transform: translateX(100%) rotateY(-15deg);
 }
 
-/* الكارت في النص */
 .theater-card {
   position: relative;
   z-index: 6;
@@ -751,7 +734,6 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   gap: 15px;
 }
 
-/* توقيع Eyad Taha بخط خفيف وشيك */
 .signature-name {
   font-family: 'Sacramento', cursive;
   font-size: 34px;
@@ -840,13 +822,12 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   display: block !important;
 }
 
-/* إلغاء الكابشن والمساحات الفاضية نهائياً */
 #randomsGrid .photo-label {
   display: none !important;
 }
 
 /* =====================================================================
-   تنسيق كارت إياد تaha بلمسة بصرية مميزة وبدون أي كلمات
+   تنسيق كارت إياد طه بلمسة بصرية مميزة
    ===================================================================== */
 .pcard[data-name*="eyad taha"] .polaroid {
   border: 3px solid var(--yellow) !important;
@@ -854,7 +835,6 @@ box-shadow:0 1px 0 var(--edge),0 2px 0 var(--edge),0 3px 0 var(--edge),0 4px 0 v
   transform: translateY(-6px) scale(1.03);
 }
 
-/* تاج ذهبي مجسم وفخم (بدون أي كلام) يظهر فوق الكارت مباشرة */
 .pcard[data-name*="eyad taha"] .polaroid::before {
   content: "👑";
   position: absolute;
