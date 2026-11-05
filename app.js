@@ -333,11 +333,11 @@ function initTrips() {
   box.className = 'route'; box.replaceChildren();
   
   trips.forEach((t, i) => {
-    // جلب صورة الكفر من content.js أو استخدام صورة افتراضية شيك في حال عدم توفرها
+    // جلب صورة الكفر من content.js أو استخدام صورة افتراضية
     const coverImg = t.cover ? path(t.cover, 'photos') : 'https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?q=80&w=600&auto=format&fit=crop';
     
-    // تصميم كارت الرحلة (صورة الغلاف + التاريخ + الاسم + النوت)
-    const ticket = el('div', { class: 'ticket trip-card-cover tilt', style: 'cursor: pointer; overflow: hidden; padding: 0;' },
+    // تصميم كارت الرحلة
+    const ticket = el('div', { class: 'ticket trip-card-cover', style: 'cursor: pointer; overflow: hidden; padding: 0; position: relative;' },
       el('div', { 
         class: 'trip-cover-img', 
         style: `background-image: url('${coverImg}'); height: 160px; background-size: cover; background-position: center;` 
@@ -350,15 +350,101 @@ function initTrips() {
       )
     );
     
-    // فتح حائط الصور (Detective Wall) بالصور المحددة في content.js عند الضغط
-    ticket.onclick = () => { 
-      pop(); 
+    // الحدث عند الضغط على الكارت لفتح حائط الصور بشكل عشوائي وكامل بدون قص
+    ticket.onclick = (e) => {
+      e.stopPropagation();
+      if (typeof pop === 'function') pop();
+      
       const tripPhotos = (t.photos && t.photos.length) ? t.photos.map(p => path(p, 'photos')) : [coverImg];
-      openWallOfFame(t.name, tripPhotos); 
+      
+      // التأكد من وجود الدالة أو إنشائها مباشرة هنا لضمان عدم حدوث خطأ
+      if (typeof openWallOfFame === 'function') {
+        openWallOfFame(t.name, tripPhotos);
+      } else {
+        openDetectiveWallCustom(t.name, tripPhotos);
+      }
     };
     
-    box.append(el('div', { class: 'stop' }, el('span', { class: 'pinm', text: '📍' }), ticket));
+    box.append(el('div', { class: 'stop' }, el('span', { class: 'pinm', text: '📍' }, ticket));
   });
+}
+
+// دالة حائط التحقيق (Detective Wall) المخصصة لعرض الصور عشوائياً وكاملة بدون قص
+function openDetectiveWallCustom(title, photosArray) {
+  // إزالة أي حائط قديم لو موجود
+  const existingModal = document.getElementById('custom-det-wall');
+  if (existingModal) existingModal.remove();
+
+  const modal = document.createElement('div');
+  modal.id = 'custom-det-wall';
+  modal.style.cssText = `
+    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(5, 8, 15, 0.96); z-index: 99999;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    padding: 20px; box-sizing: border-box; overflow: hidden;
+  `;
+
+  const header = document.createElement('div');
+  header.style.cssText = `color: #fff; font-size: 24px; margin-bottom: 15px; font-weight: bold; text-align: center;`;
+  header.textContent = `🕵️‍♂️ Detective Wall: ${title}`;
+
+  const container = document.createElement('div');
+  container.style.cssText = `
+    position: relative; width: 100%; max-width: 1200px; height: 75vh;
+    background: #0f172a; border: 2px solid #334155; border-radius: 12px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.7); overflow: hidden;
+  `;
+
+  photosArray.forEach((photoSrc, index) => {
+    const card = document.createElement('div');
+    // توزيع عشوائي للمكان على الحائط وزاوية ميل عشوائية
+    const randomLeft = Math.random() * 70; // نسبة مئوية للعرض
+    const randomTop = Math.random() * 65;  // نسبة مئوية للطول
+    const randomRotate = Math.random() * 26 - 13; // زاوية بين -13 و +13 درجة
+
+    card.style.cssText = `
+      position: absolute; left: ${randomLeft}%; top: ${randomTop}%;
+      background: #ffffff; padding: 8px 8px 22px 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6); border-radius: 3px;
+      transform: rotate(${randomRotate}deg); transition: transform 0.3s ease, z-index 0.3s ease;
+      cursor: pointer; width: 150px; box-sizing: border-box;
+    `;
+
+    const img = document.createElement('img');
+    img.src = photoSrc;
+    // أهم نقطة: object-fit: contain لضمان عدم تأثر الصورة وعرضها كاملة بدون قص أي جزء منها
+    img.style.cssText = `
+      width: 100%; height: 130px; object-fit: contain; background: #000; display: block;
+    `;
+
+    card.appendChild(img);
+
+    // تأثير عند الوقوف بالماوس لتكبير الصورة وجعلها في المقدمة
+    card.onmouseenter = () => {
+      card.style.transform = 'scale(1.25) rotate(0deg)';
+      card.style.zIndex = '9999';
+    };
+    card.onmouseleave = () => {
+      card.style.transform = `rotate(${randomRotate}deg)`;
+      card.style.zIndex = '1';
+    };
+
+    container.appendChild(card);
+  });
+
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = 'إغلاق الحائط ✕';
+  closeBtn.style.cssText = `
+    margin-top: 15px; background: #e11d48; color: white; border: none;
+    padding: 10px 25px; font-size: 16px; border-radius: 8px; cursor: pointer;
+    font-family: inherit; font-weight: bold; box-shadow: 0 4px 12px rgba(225,29,72,0.4);
+  `;
+  closeBtn.onclick = () => modal.remove();
+
+  modal.appendChild(header);
+  modal.appendChild(container);
+  modal.appendChild(closeBtn);
+  document.body.appendChild(modal);
 }
 /* ============ MAIL ============ */
 const api = () => (S.mailApi || '').trim();
