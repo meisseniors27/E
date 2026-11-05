@@ -210,7 +210,8 @@ function moveRider(animate) {
 }
 function setMode(id, animate) {
   mode = id; const m = modeObj(); last = {};
-  $('#cdsub').textContent = m.sub || ''; $('#cdjoke').textContent = m.joke || '';
+  const subEl = $('#cdsub'); if (subEl) subEl.textContent = m.sub || '';
+  const jokeEl = $('#cdjoke'); if (jokeEl) jokeEl.textContent = m.joke || '';
   document.querySelectorAll('#cdtabs button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.id === id)));
   tick(); moveRider(animate);
 }
