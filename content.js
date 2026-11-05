@@ -73,7 +73,7 @@ window.SITE = {
 
   /* ---------- TRIPS ---------- */
   trips: [
-    { name: "Our First Trip (rename me)", date: "Month 2026", note: "Where we went, and how we got lost.", folder: "first-trip" },
+    { name: "WADI DEGLA PROTECTOTATE", date: "2 MAY 2025", note: "Desert dust, endless laughs, and good times", folder: "WADIDEGLA" },
     { name: "The Big Trip (rename me)",   date: "Month 2027", note: "Nobody remembers the plan. Everybody remembers the snacks.", folder: "big-trip" }
   ],
 
