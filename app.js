@@ -98,6 +98,11 @@ function renderLB() {
   const multi = lbList.length > 1; $('#lbprev').hidden = !multi; $('#lbnext').hidden = !multi;
 }
 function openLB(list, i) { lbList = list; lbI = i; renderLB(); $('#lb').hidden = false; $('#lbclose').focus(); }
+// Trip photos: opens the lightbox on the trip's photos (prev/next arrows to browse)
+function openWallOfFame(title, photos) {
+  const list = (photos || []).map((src, i) => ({ src, cap: title + ' · ' + (i + 1) + '/' + photos.length }));
+  if (list.length) openLB(list, 0);
+}
 function closeLB() { $('#lb').hidden = true; $('#lbimg').removeAttribute('src'); }
 $('#lbclose').onclick = closeLB;
 $('#lb').addEventListener('click', e => { if (e.target.id === 'lb') closeLB(); });
