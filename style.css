@@ -1201,3 +1201,36 @@ body.vault-opening #splash{animation:vSiteIn 4.2s cubic-bezier(.2,.8,.2,1) both}
 
 @media (prefers-reduced-motion:reduce){.tstop,.tcard,.tfg{animation:none!important;transition:none!important}}
 .lite .tstop,.lite .tcard,.lite .tfg{animation:none!important;transition:none!important}
+
+/* ===== MEMORIES LANE v2 ===== */
+
+/* الصورة كاملة بنسبتها، من غير خلفية ولا قص */
+.tphoto{aspect-ratio:auto;margin:14px 12px 0;border-radius:16px;overflow:hidden;background:#0b1034;box-shadow:0 14px 32px rgba(0,0,0,.5)}
+.tphoto .tbg{display:none}
+.tphoto .tfg{width:100%;height:auto;max-height:78vh;object-fit:contain;display:block}
+
+/* شريط لاصق فوق الصورة زي باقي الموقع */
+.tcard{position:relative}
+.tcard::before{content:"";position:absolute;z-index:3;top:2px;left:50%;width:96px;height:24px;margin-left:-48px;background:rgba(255,200,61,.65);border-radius:3px;rotate:-3deg;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+
+/* لمعة بتعدي على الكارت وقت الـ hover */
+.tcard::after{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.16) 50%,transparent 60%);translate:-120% 0;transition:translate .8s ease}
+.tcard:hover::after{translate:120% 0}
+
+/* زرار "Open the wall" يطلع وقت الـ hover على الكمبيوتر، وثابت على الموبايل */
+@media (hover:hover){
+  .topen{opacity:0;translate:0 10px;transition:opacity .3s,translate .3s}
+  .tcard:hover .topen,.tcard:focus-visible .topen{opacity:1;translate:0 0}
+}
+
+/* النص */
+.tbody{padding:18px 20px 22px}
+.tdate{display:inline-block;padding:4px 14px 2px;border-radius:999px;font-size:20px;background:rgba(255,200,61,.14);border:1px solid rgba(255,200,61,.5)}
+.tbody h3{font-size:clamp(26px,3vw,36px);margin:10px 0 8px}
+
+/* خيط صغير يوصل الكارت بالدبوس على الخط */
+.tstop::before{content:"";position:absolute;top:38px;left:-27px;width:27px;border-top:3px dotted rgba(169,214,247,.5)}
+@media (min-width:769px){
+  .tstop:nth-child(odd)::before{left:auto;right:-46px;width:46px}
+  .tstop:nth-child(even)::before{left:-46px;width:46px}
+}
