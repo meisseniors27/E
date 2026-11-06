@@ -94,94 +94,92 @@ const path = (f, dir) => (/^(https?:)?\/\//.test(f) || f.includes('/')) ? f : di
  
 let lbList = [], lbI = 0;
 function renderLB() {
-  const it = lbList[lbI]; $('#lbimg').src = it.src; $('#lbimg').alt = it.cap || ''; $('#lbcap').textContent = it.cap || '';
+  const it = lbList[lbI], im = $('#lbimg');
+  im.src = it.src; im.alt = it.cap || ''; $('#lbcap').textContent = it.cap || '';
+  im.classList.remove('swap'); void im.offsetWidth; im.classList.add('swap');
   const multi = lbList.length > 1; $('#lbprev').hidden = !multi; $('#lbnext').hidden = !multi;
 }
 function openLB(list, i) { lbList = list; lbI = i; renderLB(); $('#lb').hidden = false; $('#lbclose').focus(); }
 
 // ============ DETECTIVE WALL & TRIPS LOGIC ============
+function drawStrings(grid) {
+  const cards = [...grid.querySelectorAll('.polaroid-card')];
+  if (cards.length < 2) return;
+  const NS = 'http://www.w3.org/2000/svg';
+  let svg = grid.querySelector('.yarn'), p;
+  if (!svg) {
+    svg = document.createElementNS(NS, 'svg');
+    svg.setAttribute('class', 'yarn draw');
+    p = document.createElementNS(NS, 'path');
+    p.setAttribute('pathLength', '1');
+    svg.append(p);
+    grid.prepend(svg);
+  } else p = svg.firstChild;
+  svg.setAttribute('width', grid.scrollWidth);
+  svg.setAttribute('height', grid.scrollHeight);
+  const pts = cards.map(c => [c.offsetLeft + c.offsetWidth / 2, c.offsetTop]);
+  let d = `M${pts[0][0]} ${pts[0][1]}`;
+  for (let i = 1; i < pts.length; i++) {
+    const [x0, y0] = pts[i - 1], [x1, y1] = pts[i];
+    d += ` Q${(x0 + x1) / 2} ${Math.max(y0, y1) + 28} ${x1} ${y1}`;
+  }
+  p.setAttribute('d', d);
+}
+
 function openWallOfFame(title, photos) {
-  const list = (photos || []).map((src, i) => ({ src, cap: title + ' · ' + (i + 1) + '/' + photos.length }));
-  
-  const existingWall = document.getElementById('detectiveWallOverlay');
-  if (existingWall) existingWall.remove();
-
-  const wallOverlay = el('div', { id: 'detectiveWallOverlay', class: 'detective-board-overlay', style: `
-    position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(5, 8, 15, 0.95); z-index: 99999;
-    display: flex; flex-direction: column; justify-content: center; align-items: center;
-    padding: 20px; box-sizing: border-box; overflow-y: auto;
-  ` },
-    el('div', { class: 'detective-board-header', style: 'display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 1200px; margin-bottom: 15px;' },
-      el('h2', { style: 'color: #fff; font-size: 22px; margin: 0; font-family: inherit;', text: `🕵️‍♂️ Detective Wall: ${title}` }),
-      el('button', { class: 'detective-close-btn', type: 'button', text: '✕ إغلاق', style: 'background: #e11d48; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold;', onclick: closeDetectiveWall })
-    ),
-    el('div', { class: 'detective-board-container detective-board detective-grid', style: `
-      position: relative; width: 100%; max-width: 1200px; min-height: 70vh;
-      background: #0f172a; border: 2px solid #334155; border-radius: 12px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.7); padding: 30px; display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; align-items: center; box-sizing: border-box;
-    ` })
-  );
-
-  const boardContainer = wallOverlay.querySelector('.detective-board-container');
+  closeDetectiveWall(true);
+  const list = (photos || []).map((src, i) => ({ src, cap: `${title} · ${i + 1}/${photos.length}` }));
+  const grid = el('div', { class: 'detective-grid' });
+  const board = el('div', { class: 'detective-board' },
+    el('div', { class: 'board-header' },
+      el('span', { class: 'classified-stamp', text: 'CASE FILE' }),
+      el('h2', { class: 'wall-heading', text: title })),
+    grid);
+  const wall = el('div', { id: 'detectiveWallOverlay', class: 'wall-overlay active', role: 'dialog', 'aria-modal': 'true', 'aria-label': title },
+    el('button', { class: 'wall-close', type: 'button', 'aria-label': 'Close', text: '✕', onclick: () => closeDetectiveWall() }),
+    board);
 
   if (!list.length) {
-    boardContainer.append(el('p', { class: 'hand', style: 'color: #ffc83d; font-size: 24px; text-align: center; width: 100%;', text: '⏳ Photos coming soon for this trip!' }));
+    grid.append(el('p', { class: 'hand', style: 'color:#fef08a;font-size:24px;text-align:center;grid-column:1/-1', text: '⏳ Photos coming soon for this trip!' }));
   } else {
-    list.forEach((item, index) => {
-      const isMobile = innerWidth <= 430;
-      const rot = (Math.random() * 16 - 8).toFixed(1);
-      const cardWidth = isMobile ? '110px' : '160px';
-
-      const polaroidCard = el('div', {
-        class: 'polaroid polaroid-card tilt',
-        style: `
-          background: #fff; padding: 8px 8px 20px 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.6);
-          border-radius: 3px; transform: rotate(${rot}deg); cursor: pointer; width: ${cardWidth};
-          box-sizing: border-box; transition: transform 0.3s ease, z-index 0.3s ease; position: relative;
-        `
-      },
-        el('i', { class: 'tape', style: 'position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 40px; height: 15px; background: rgba(255,255,255,0.6);', 'aria-hidden': 'true' }),
-        el('div', { class: 'ph', style: 'background: #000; overflow: hidden;' },
-          el('img', { src: item.src, alt: item.cap, loading: 'lazy', style: 'width: 100%; height: auto; object-fit: contain; display: block;' })
-        ),
-        item.cap ? el('figcaption', { style: 'font-size: 11px; color: #1e293b; text-align: center; margin-top: 8px; font-family: inherit;', text: item.cap }) : null
-      );
-
-      polaroidCard.onmouseenter = () => { polaroidCard.style.transform = 'scale(1.2) rotate(0deg)'; polaroidCard.style.zIndex = '9999'; };
-      polaroidCard.onmouseleave = () => { polaroidCard.style.transform = `rotate(${rot}deg)`; polaroidCard.style.zIndex = '1'; };
-
-      polaroidCard.onclick = () => {
-        if (typeof pop === 'function') pop();
-        openLB(list, index);
-      };
-
-      boardContainer.append(polaroidCard);
+    list.forEach((it, i) => {
+      const rot = (Math.random() * 10 - 5).toFixed(1);
+      const card = el('div', { class: 'polaroid-card', style: `--rot:${rot}deg;--i:${Math.min(i, 12)}`, tabindex: '0', role: 'button', 'aria-label': it.cap },
+        el('div', { class: 'push-pin' }),
+        el('div', { class: 'photo-inner' }, el('img', { src: it.src, alt: it.cap, loading: 'lazy' })),
+        el('div', { class: 'photo-label', text: '#' + (i + 1) }));
+      const open = () => { pop(); openLB(list, i); };
+      card.onclick = open;
+      card.onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } };
+      grid.append(card);
     });
   }
 
-  wallOverlay.addEventListener('click', (e) => {
-    if (e.target === wallOverlay) closeDetectiveWall();
-  });
-
-  const escListener = (e) => {
-    if (e.key === 'Escape') {
-      closeDetectiveWall();
-      removeEventListener('keydown', escListener);
-    }
-  };
-  addEventListener('keydown', escListener);
-
-  document.body.append(wallOverlay);
+  wall.addEventListener('click', e => { if (e.target === wall) closeDetectiveWall(); });
+  document.body.append(wall);
+  requestAnimationFrame(() => drawStrings(grid));
+  if (window.ResizeObserver) new ResizeObserver(() => drawStrings(grid)).observe(grid);
 }
 
-function closeDetectiveWall() {
-  const wallOverlay = document.getElementById('detectiveWallOverlay');
-  if (wallOverlay) {
-    if (typeof pop === 'function') pop();
-    wallOverlay.remove();
+function closeDetectiveWall(silent) {
+  const w = document.getElementById('detectiveWallOverlay');
+  if (!w || w.classList.contains('closing')) return;
+  if (silent || LITE) { w.remove(); return; }
+  pop();
+  w.classList.add('closing');
+  setTimeout(() => w.remove(), 280);
+}
+
+addEventListener('keydown', e => {
+  const lb = $('#lb');
+  if (lb && !lb.hidden) {
+    if (e.key === 'Escape') closeLB();
+    else if (e.key === 'ArrowLeft') $('#lbprev').click();
+    else if (e.key === 'ArrowRight') $('#lbnext').click();
+    return;
   }
-}
+  if (e.key === 'Escape') closeDetectiveWall();
+});
 
 function closeLB() { $('#lb').hidden = true; $('#lbimg').removeAttribute('src'); }
 $('#lbclose').onclick = closeLB;
