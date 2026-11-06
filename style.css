@@ -1157,3 +1157,47 @@ body.vault-opening #splash{animation:vSiteIn 4.2s cubic-bezier(.2,.8,.2,1) both}
   .detective-grid{grid-template-columns:repeat(2,1fr);gap:18px}
   .detective-board{padding:20px 10px;border-width:8px}
 }
+
+/* ===== MEMORIES LANE (trips) ===== */
+#trips .page.narrow{max-width:980px}
+.tl{position:relative;padding:10px 0 20px 44px;margin-top:10px;display:flex;flex-direction:column;gap:34px}
+.tl::before{content:"";position:absolute;left:15px;top:0;bottom:0;width:3px;border-radius:3px;background:linear-gradient(#ffc83d,rgba(169,214,247,.5) 18%,rgba(169,214,247,.12))}
+.tstop{position:relative;animation:tIn .6s cubic-bezier(.2,.9,.25,1) backwards;animation-delay:calc(var(--i,0)*90ms)}
+.tdot{position:absolute;left:-44px;top:22px;width:34px;height:34px;border-radius:50%;background:var(--yellow);border:3px solid #fff;display:grid;place-items:center;font-size:15px;z-index:2;box-shadow:0 0 0 6px rgba(255,200,61,.18),0 6px 16px rgba(0,0,0,.45)}
+
+.tcard{display:block;width:100%;color:#fff;cursor:pointer;border-radius:24px;overflow:hidden;
+  background:linear-gradient(145deg,rgba(255,255,255,.15),rgba(255,255,255,.05));
+  border:1px solid var(--glass-line);box-shadow:var(--glass-shadow);
+  transition:transform .25s cubic-bezier(.2,.9,.25,1),box-shadow .25s}
+.tcard:hover{transform:translateY(-6px) rotate(-.4deg);box-shadow:0 24px 50px rgba(0,0,0,.55)}
+.tcard:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}
+
+.tphoto{position:relative;aspect-ratio:4/3;overflow:hidden;background:#0b1034}
+.tphoto .tbg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(18px) brightness(.55);transform:scale(1.25)}
+.tphoto .tfg{position:relative;z-index:1;width:100%;height:100%;object-fit:contain;display:block;transition:transform .5s ease}
+.tcard:hover .tfg{transform:scale(1.04)}
+.tempty{display:grid;place-items:center;height:100%;font-size:48px;background:repeating-linear-gradient(45deg,rgba(120,160,255,.14) 0 12px,rgba(120,160,255,.07) 12px 24px)}
+.tcount,.topen{position:absolute;z-index:2;font-weight:800;font-size:13px;padding:7px 12px;border-radius:999px;border:2px solid #fff}
+.tcount{left:12px;top:12px;background:rgba(5,8,22,.7);color:#fff}
+.topen{right:12px;bottom:12px;background:var(--yellow);color:var(--navy)}
+
+.tbody{padding:16px 18px 20px}
+.tdate{display:block;font-family:var(--fc);font-weight:700;font-size:24px;line-height:1;color:var(--yellow)}
+.tbody h3{font-family:var(--fh);font-weight:900;font-size:clamp(24px,5vw,32px);line-height:1;margin:6px 0 8px;color:#fff}
+.tbody p{font-family:var(--fc);font-weight:700;font-size:22px;line-height:1.1;margin:0;color:#bcd2ff}
+
+@keyframes tIn{from{opacity:0;transform:translate(var(--fx,0),30px)}to{opacity:1;transform:none}}
+
+/* كمبيوتر: يمين وشمال على خط في النص */
+@media (min-width:769px){
+  .tl{padding:10px 0 20px;gap:44px}
+  .tl::before{left:50%;transform:translateX(-50%)}
+  .tstop{width:calc(50% - 46px)}
+  .tstop:nth-child(odd){align-self:flex-start;--fx:-40px}
+  .tstop:nth-child(even){align-self:flex-end;--fx:40px}
+  .tstop:nth-child(odd) .tdot{left:auto;right:-63px}
+  .tstop:nth-child(even) .tdot{left:-63px}
+}
+
+@media (prefers-reduced-motion:reduce){.tstop,.tcard,.tfg{animation:none!important;transition:none!important}}
+.lite .tstop,.lite .tcard,.lite .tfg{animation:none!important;transition:none!important}
