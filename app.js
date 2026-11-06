@@ -408,30 +408,44 @@ let tripsBuilt = false;
 function initTrips() {
   if (tripsBuilt) return; tripsBuilt = true;
   const box = $('#tripl'), trips = S.trips || [];
-  box.className = 'route'; box.replaceChildren();
-  
+  box.className = 'tl'; box.replaceChildren();
+  if (!trips.length) { box.append(el('p', { class: 'hand none', text: 'Trips coming soon…' })); return; }
+
   trips.forEach((t, i) => {
-    const coverImg = t.cover ? path(t.cover, 'photos') : 'https://images.unsplash.com/photo-1503177119275-0aa32b3a9368?q=80&w=600&auto=format&fit=crop';
-    const ticket = el('div', { class: 'ticket', style: 'cursor: pointer;' },
-      el('div', { class: 'tleft' },
-        t.date ? el('span', { class: 'hand', text: t.date }) : null,
+    const photos = (t.photos || []).map(p => path(p, 'photos'));
+    const cover = t.cover ? path(t.cover, 'photos') : photos[0];
+    const open = () => { pop(); openWallOfFame(t.name, photos); };
+
+    const photo = el('div', { class: 'tphoto' });
+    const empty = () => photo.replaceChildren(el('div', { class: 'tempty', text: '📷' }));
+    if (cover) {
+      const bg = el('img', { class: 'tbg', src: cover, alt: '', 'aria-hidden': 'true', loading: 'lazy' });
+      const fg = el('img', { class: 'tfg', src: cover, alt: t.name, loading: 'lazy' });
+      fg.onerror = empty;
+      photo.append(bg, fg);
+    } else empty();
+    if (photos.length) photo.append(el('span', { class: 'tcount', text: '📸 ' + photos.length }));
+    photo.append(el('span', { class: 'topen', text: 'Open the wall →' }));
+
+    const card = el('div', {
+      class: 'tcard', role: 'button', tabindex: '0', 'aria-label': 'Open ' + t.name,
+      onclick: open,
+      onkeydown: e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } }
+    },
+      photo,
+      el('div', { class: 'tbody' },
+        t.date ? el('span', { class: 'tdate', text: t.date }) : null,
         el('h3', { text: t.name }),
         t.note ? el('p', { text: t.note }) : null
-      ),
-      el('div', { class: 'tright' }, el('span', { class: 'pinm', text: '📍' }))
+      )
     );
-    const ph = el('div', { class: 'ph' }); photoFill(ph, t.cover ? path(t.cover, 'photos') : '', i, 'trip photo');
-    const f = el('figure', { class: 'polaroid' }, el('i', { class: 'tape', 'aria-hidden': 'true' }), ph, el('figcaption', { text: t.name }));
-    
-    ticket.onclick = f.onclick = () => {
-      pop();
-      const tripPhotos = (t.photos && t.photos.length) ? t.photos.map(p => path(p, 'photos')) : [];
-      openWallOfFame(t.name, tripPhotos);
-    };
-    box.append(el('div', { class: 'stop' }, f, ticket));
+
+    box.append(el('div', { class: 'tstop', style: `--i:${Math.min(i, 8)}` },
+      el('span', { class: 'tdot', 'aria-hidden': 'true', text: '📍' }),
+      card
+    ));
   });
 }
- 
 /* ============ MAIL ============ */
 const api = () => (S.mailApi || '').trim();
 let names = null;
