@@ -105,8 +105,8 @@ window.SITE = {
         "trips/WADIDEGLA/15.jpg",
         "trips/WADIDEGLA/16.jpg",
         "trips/WADIDEGLA/17.jpg",
-        "trips/WADIDEGLA/18.jpg",
-        "trips/WADIDEGLA/19.jpg"
+      // "trips/WADIDEGLA/18.jpg",
+      //  "trips/WADIDEGLA/19.jpg"
       //  "trips/WADIDEGLA/20.jpg"
       ]
     },
