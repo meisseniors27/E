@@ -1120,3 +1120,40 @@ body.vault-opening #splash{animation:vSiteIn 4.2s cubic-bezier(.2,.8,.2,1) both}
   box-shadow: 0 0 28px rgba(220, 39, 67, 0.9), 0 6px 16px rgba(0, 0, 0, 0.5) !important;
   border-color: #ffffff !important;
 }
+
+/* ===== WALL + LIGHTBOX ===== */
+#lb{z-index:10050}
+.wall-close{position:fixed;top:max(14px,env(safe-area-inset-top));right:14px;z-index:3;width:46px;height:46px;border-radius:50%;background:#e11d48;color:#fff;border:2px solid #fff;font-weight:800;font-size:18px;cursor:pointer}
+.detective-grid{position:relative}
+.detective-grid .polaroid-card{z-index:1;animation:cardDrop .55s cubic-bezier(.2,1.2,.3,1) backwards;animation-delay:calc(var(--i,0)*70ms + .15s)}
+.detective-grid .polaroid-card:hover{z-index:20}
+.yarn{position:absolute;left:0;top:0;pointer-events:none;z-index:0;overflow:visible}
+.yarn path{fill:none;stroke:#d11a2a;stroke-width:2.5;stroke-linecap:round;opacity:.85;filter:drop-shadow(0 2px 1px rgba(0,0,0,.5))}
+.yarn.draw path{stroke-dasharray:1;stroke-dashoffset:1;animation:yarnDraw 1.4s ease .5s forwards}
+
+/* الحركات */
+.wall-overlay{animation:fadeIn .3s ease both}
+.wall-overlay.closing{animation:fadeOut .28s ease both;pointer-events:none}
+.wall-overlay .detective-board{animation:boardIn .5s cubic-bezier(.2,.9,.25,1) both}
+.wall-overlay.closing .detective-board{animation:boardOut .28s ease both}
+#lb:not([hidden]){animation:fadeIn .25s ease both}
+#lb img.swap{animation:lbSwap .35s cubic-bezier(.2,.9,.25,1) both}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes fadeOut{from{opacity:1}to{opacity:0}}
+@keyframes boardIn{from{opacity:0;transform:translateY(40px) scale(.94)}to{opacity:1;transform:none}}
+@keyframes boardOut{to{opacity:0;transform:translateY(30px) scale(.96)}}
+@keyframes cardDrop{from{opacity:0;translate:0 -70px;scale:1.3}to{opacity:1;translate:0 0;scale:1}}
+@keyframes yarnDraw{to{stroke-dashoffset:0}}
+@keyframes lbSwap{from{opacity:0;transform:scale(.88)}to{opacity:1;transform:none}}
+
+@media (prefers-reduced-motion:reduce){
+  .wall-overlay,.wall-overlay *,#lb,#lb *{animation:none!important}
+  .yarn.draw path{stroke-dasharray:none;stroke-dashoffset:0}
+}
+.lite .wall-overlay,.lite .wall-overlay *,.lite #lb,.lite #lb *{animation:none!important}
+.lite .yarn.draw path{stroke-dasharray:none;stroke-dashoffset:0}
+
+@media (max-width:430px){
+  .detective-grid{grid-template-columns:repeat(2,1fr);gap:18px}
+  .detective-board{padding:20px 10px;border-width:8px}
+}
