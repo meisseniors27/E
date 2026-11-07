@@ -1234,3 +1234,26 @@ body.vault-opening #splash{animation:vSiteIn 4.2s cubic-bezier(.2,.8,.2,1) both}
   .tstop:nth-child(odd)::before{left:auto;right:-46px;width:46px}
   .tstop:nth-child(even)::before{left:-46px;width:46px}
 }
+
+/* =====================================================================
+   توسيع كارت إياد تافه وجعله في السطر الأول لوحده في المنتصف
+   ===================================================================== */
+.pgrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 26px 16px;
+}
+
+@media(min-width: 640px) {
+  .pgrid { grid-template-columns: repeat(3, 1fr); }
+}
+@media(min-width: 900px) {
+  .pgrid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* الكارت الأول (Eyad Taha) يأخذ كامل العرض ويتم سنترته */
+.pgrid .pcard:first-child {
+  grid-column: 1 / -1;
+  max-width: 260px;
+  margin: 0 auto;
+}
