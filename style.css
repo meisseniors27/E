@@ -1237,6 +1237,7 @@ body.vault-opening #splash{animation:vSiteIn 4.2s cubic-bezier(.2,.8,.2,1) both}
 
 /* ===== كارت إياد لوحده في النص في صف خاص، وباقي الكروت تحته ===== */
 .pcard[data-name*="eyad taha"]{
+  order: -1;                /* ← السطر الجديد: يفضل أول واحد دايماً */
   grid-column: 1 / -1;      /* ياخد الصف كله لوحده */
   justify-self: center;     /* وينتصف */
   width: calc((100% - 16px) / 2);              /* موبايل: عمودين */
