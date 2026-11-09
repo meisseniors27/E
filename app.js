@@ -318,7 +318,7 @@ function initHome() {
   $('#bubble').textContent = S.bubble || 'Yes, we really are graduating.';
   photoFill($('#grouppol .ph'), S.groupPhoto, 0, 'group photo coming soon');
   $('#groupcap').textContent = S.groupCaption || 'the whole crew';
-  const items = S.band || ['SCAN. SMILE. REMEMBER.'];
+  const items = S.band || [' SMILE. REMEMBER.'];
   const unit = items.map(t => t + '   ★   ').join('').repeat(3);
   $('#band').append(el('span', { text: unit }), el('span', { text: unit }));
   const ol = $('#rules'); (S.rules || []).forEach(r => ol.append(el('li', { text: r })));
