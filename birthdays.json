@@ -4,7 +4,7 @@
   "classNo": 27,
   "window": 30,
   "people": [
-    { "name": "Eyad Taha",        "birthday": "", "photoPos": "center" },
+    { "name": "Eyad Taha",        "birthday": "01-01", "photoPos": "center" },
     { "name": "Sodfa Mohamed",    "birthday": "", "photoPos": "center" },
     { "name": "Fajr Mohamed",     "birthday": "", "photoPos": "center" },
     { "name": "Jamila Amr",       "birthday": "", "photoPos": "center" },
