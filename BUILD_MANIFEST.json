@@ -1,0 +1,44 @@
+{
+  "files": {
+    "Code.gs": {
+      "secure_bytes": 6732,
+      "source_bytes": 6732,
+      "reduction_pct": 0.0
+    },
+    "app.js": {
+      "secure_bytes": 502300,
+      "source_bytes": 23708,
+      "reduction_pct": -2018.7
+    },
+    "birthdays.js": {
+      "secure_bytes": 270267,
+      "source_bytes": 28484,
+      "reduction_pct": -848.8
+    },
+    "birthdays.json": {
+      "secure_bytes": 2879,
+      "source_bytes": 2879,
+      "reduction_pct": 0.0
+    },
+    "content.js": {
+      "secure_bytes": 558806,
+      "source_bytes": 496014,
+      "reduction_pct": -12.7
+    },
+    "data.json": {
+      "secure_bytes": 5890,
+      "source_bytes": 5890,
+      "reduction_pct": 0.0
+    },
+    "index.html": {
+      "secure_bytes": 21921,
+      "source_bytes": 15042,
+      "reduction_pct": -45.7
+    },
+    "style.css": {
+      "secure_bytes": 76431,
+      "source_bytes": 81940,
+      "reduction_pct": 6.7
+    }
+  }
+}
