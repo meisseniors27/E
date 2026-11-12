@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>MEIS '27 — Birthday & Photo Editor</title>
+<style>
+  :root{--bg:#0b1034;--card:#141b4a;--line:#2a3478;--ink:#eef1ff;--mute:#9aa5e0;--gold:#ffc83d;--red:#ff6b81;--ok:#5ee39a}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.4 system-ui,Segoe UI,Arial,sans-serif;padding-bottom:90px}
+  header{position:sticky;top:0;z-index:5;background:#0b1034ee;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:12px 16px}
+  h1{margin:0 0 4px;font-size:18px}
+  .hint{color:var(--mute);font-size:13px;margin:0 0 10px}
+  .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+  input[type=search],select,button,input[type=file]{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:8px;padding:7px 10px}
+  input[type=search]{min-width:200px;flex:1}
+  button{cursor:pointer}
+  button:hover{border-color:var(--gold)}
+  button.primary{background:var(--gold);color:#1a1200;border-color:var(--gold);font-weight:700}
+  .stat{margin-left:auto;color:var(--mute);font-size:13px}
+  .loader{margin:16px;padding:14px;border:1px dashed var(--line);border-radius:12px;background:#10163f}
+  .loader label{display:block;margin:8px 0 2px;color:var(--mute);font-size:13px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;padding:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:10px;position:relative}
+  .card.nodate{border-color:#7a4a58}
+  .frame{width:100%;aspect-ratio:1/1;border-radius:8px;overflow:hidden;background:#1a0d08;cursor:grab;touch-action:none;position:relative;user-select:none}
+  .frame:active{cursor:grabbing}
+  .frame img{width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;-webkit-user-drag:none}
+  .frame .empty{position:absolute;inset:0;display:grid;place-items:center;font-size:34px;opacity:.6}
+  .name{font-weight:700;margin:8px 0 6px;font-size:14px;word-break:break-word}
+  .row{display:flex;gap:6px}
+  .row select{flex:1;min-width:0;padding:6px}
+  .meta{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:12px;color:var(--mute)}
+  .meta code{background:#0b1034;padding:2px 6px;border-radius:5px;color:var(--gold)}
+  .meta button{padding:3px 8px;font-size:12px}
+  .dot{position:absolute;top:8px;right:8px;background:var(--red);color:#fff;font-size:11px;padding:2px 7px;border-radius:99px;font-weight:700}
+  footer{position:fixed;left:0;right:0;bottom:0;background:#0b1034f2;border-top:1px solid var(--line);padding:10px 16px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .msg{color:var(--ok);font-size:13px}
+  .none{padding:30px;text-align:center;color:var(--mute)}
+  .zoomrow{display:flex;align-items:center;gap:8px;margin-top:8px;font-size:12px;color:var(--mute)}
+  .zoomrow input{flex:1;min-width:0}
+  .zoomrow b{min-width:38px;text-align:right;color:var(--gold)}
+  .tools{display:flex;gap:6px;margin-top:8px}
+  .tools button{flex:1;padding:4px 6px;font-size:12px}
+  .badge{position:absolute;top:8px;left:8px;background:#0b1034cc;color:var(--ok);font-size:11px;padding:2px 7px;border-radius:99px;z-index:2}
+  .badge.bad{color:var(--red)}
+</style>
+</head>
+<body>
+<header>
+  <h1>🎂 Birthday &amp; Photo Editor</h1>
+  <p class="hint">Press <b>Auto-detect all faces</b> first (needs internet), then fix any card by dragging or zooming. Pick the birthday. Then press <b>Download birthdays.json</b> and replace the file on your site.</p>
+  <div class="bar">
+    <input type="search" id="q" placeholder="search a name…" autocomplete="off">
+    <select id="flt">
+      <option value="all">Everyone</option>
+      <option value="nodate">No birthday yet</option>
+      <option value="hasdate">Has birthday</option>
+    </select>
+    <span class="stat" id="stat"></span>
+  </div>
+</header>
+
+<div class="loader" id="loader" hidden>
+  <b>Couldn’t auto-load the files</b> (normal when you open this page directly from your computer). Choose them manually:
+  <label>data.json</label><input type="file" id="fData" accept=".json,application/json">
+  <label>birthdays.json</label><input type="file" id="fBday" accept=".json,application/json">
+</div>
+
+<div class="grid" id="grid"></div>
+<p class="none" id="none" hidden>Nobody matches.</p>
+
+<footer>
+  <button class="primary" id="dl">⬇ Download birthdays.json</button>
+  <button id="autoall">🎯 Auto-detect all faces</button>
+  <button id="cp">Copy JSON</button>
+  <button id="allreset">Reset all photo positions</button>
+  <span class="msg" id="msg"></span> <span class="msg" id="prog" style="color:var(--gold)"></span>
+</footer>
+
+<script>
+(() => {
+  "use strict";
+  const $ = (s, r = document) => r.querySelector(s);
+  const norm = s => String(s || "").trim().toLowerCase().replace(/\s+/g, " ");
+  const drive = u => { if (!u) return ""; const m = u.match(/\/d\/([\w-]+)/) || u.match(/id=([\w-]+)/); return m ? "https://lh3.googleusercontent.com/d/" + m[1] : u; };
+  const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const MAXD = [31,29,31,30,31,30,31,31,30,31,30,31];
+  const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+  const ORIGIN = "50% 40%";          // must match birthdays.js
+  const LIB   = "https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.13/dist/face-api.js";
+  const MODEL = "https://cdn.jsdelivr.net/npm/@vladmandic/face-api@1.7.13/model/";
+
+  let meta = { _comment: "", tz: "Africa/Cairo", classNo: 27, window: 30 };
+  let people = [];
+  let photos = {};
+  let dirty = false;
+
+  const photoFor = name => {
+    const n = norm(name);
+    if (photos[n]) return photos[n];
+    for (const k in photos) if (k.startsWith(n) || n.startsWith(k)) return photos[k];
+    return "";
+  };
+
+  function parsePos(str) {
+    const kw = { left: 0, top: 0, center: 50, right: 100, bottom: 100 };
+    const val = t => t in kw ? kw[t] : (parseFloat(t) || 50);
+    const s = String(str || "auto").trim().toLowerCase();
+    if (s === "auto") return { x: 50, y: 22 };
+    const t = s.split(/\s+/);
+    if (t.length === 1) {
+      if (t[0] === "top" || t[0] === "bottom") return { x: 50, y: kw[t[0]] };
+      return { x: val(t[0]), y: 50 };
+    }
+    let [a, b] = t;
+    if (a === "top" || a === "bottom") [a, b] = [b, a];
+    return { x: clamp(val(a), 0, 100), y: clamp(val(b), 0, 100) };
+  }
+  const posStr = p => `${Math.round(p.x)}% ${Math.round(p.y)}%`;
+
+  function ingest(bj, dj) {
+    if (dj) {
+      photos = {};
+      (dj || []).forEach(p => { if (p.Name) photos[norm(p.Name)] = drive(p["Old or current you"]); });
+    }
+    if (bj) {
+      meta = { _comment: bj._comment || "", tz: bj.tz || "Africa/Cairo", classNo: bj.classNo || 27, window: bj.window || 30 };
+      people = (bj.people || []).map(p => {
+        const m = String(p.birthday || "").match(/^(\d{1,2})[-/](\d{1,2})$/);
+        const pos = parsePos(p.photoPos);
+        return { name: String(p.name).trim(), month: m ? +m[1] : 0, day: m ? +m[2] : 0, x: pos.x, y: pos.y, z: clamp(+p.zoom || 1, 1, 3) };
+      });
+    }
+    if (dj) {
+      (dj || []).forEach(d => {
+        const nm = String(d.Name || "").trim();
+        if (nm && !people.some(p => norm(p.name) === norm(nm))) people.push({ name: nm, month: 0, day: 0, x: 50, y: 22, z: 1 });
+      });
+    }
+    render();
+  }
+
+  async function autoLoad() {
+    try {
+      const [bj, dj] = await Promise.all([
+        fetch("birthdays.json").then(r => { if (!r.ok) throw 0; return r.json(); }),
+        fetch("data.json").then(r => { if (!r.ok) throw 0; return r.json(); })
+      ]);
+      ingest(bj, dj);
+    } catch (e) { $("#loader").hidden = false; }
+  }
+  const readFile = (f, cb) => { const r = new FileReader(); r.onload = () => { try { cb(JSON.parse(r.result)); } catch (e) { alert("That file isn't valid JSON."); } }; r.readAsText(f); };
+  let pendingB = null, pendingD = null;
+  $("#fData").onchange = e => e.target.files[0] && readFile(e.target.files[0], j => { pendingD = j; photos = {}; ingest(null, j); if (pendingB) ingest(pendingB, null); });
+  $("#fBday").onchange = e => e.target.files[0] && readFile(e.target.files[0], j => { pendingB = j; ingest(j, pendingD); });
+
+  /* ---------- face detection ---------- */
+  let modelP = null;
+  const loadScript = src => new Promise((res, rej) => { const s = document.createElement("script"); s.src = src; s.onload = res; s.onerror = () => rej(new Error("Couldn't load the face library (are you online?)")); document.head.append(s); });
+  function ensureModel() {
+    if (modelP) return modelP;
+    modelP = (async () => {
+      if (!window.faceapi) await loadScript(LIB);
+      await faceapi.nets.tinyFaceDetector.loadFromUri(MODEL);
+    })();
+    modelP.catch(() => { modelP = null; });
+    return modelP;
+  }
+  const loadImg = url => new Promise((res, rej) => { const i = new Image(); i.crossOrigin = "anonymous"; i.onload = () => res(i); i.onerror = () => rej(new Error("photo didn't load")); i.src = url; });
+
+  // Puts the biggest face at the frame's (50%, 40%) point and zooms so the face is ~42% of the frame width.
+  async function detect(p) {
+    const url = photoFor(p.name);
+    if (!url) throw new Error("no photo");
+    const img = await loadImg(url);
+    let dets;
+    try { dets = await faceapi.detectAllFaces(img, new faceapi.TinyFaceDetectorOptions({ inputSize: 512, scoreThreshold: 0.35 })); }
+    catch (e) { throw new Error("browser blocked reading the photo"); }
+    if (!dets.length) throw new Error("no face found");
+    const b = dets.reduce((a, d) => d.box.width * d.box.height > a.box.width * a.box.height ? d : a).box;
+    const nw = img.naturalWidth, nh = img.naturalHeight, s = 1 / Math.min(nw, nh);
+    const rw = nw * s, rh = nh * s;
+    const fcx = (b.x + b.width / 2) * s, fcy = (b.y + b.height / 2) * s;
+    p.x = rw - 1 > 0.001 ? clamp((0.5 - fcx) / (1 - rw) * 100, 0, 100) : 50;
+    p.y = rh - 1 > 0.001 ? clamp((0.4 - fcy) / (1 - rh) * 100, 0, 100) : 50;
+    p.z = Math.round(clamp(0.42 / (b.width * s), 1, 2.2) * 20) / 20;
+    p.det = "ok";
+  }
+
+  /* ---------- render ---------- */
+  function render() {
+    const grid = $("#grid"), q = norm($("#q").value), f = $("#flt").value;
+    grid.replaceChildren();
+    let shown = 0;
+    people.forEach(p => {
+      const has = p.month > 0 && p.day > 0;
+      if (q && !norm(p.name).includes(q)) return;
+      if (f === "nodate" && has) return;
+      if (f === "hasdate" && !has) return;
+      shown++;
+      grid.append(card(p));
+    });
+    $("#none").hidden = shown > 0;
+    updateStat();
+  }
+  function updateStat() {
+    const n = people.filter(p => p.month > 0 && p.day > 0).length;
+    $("#stat").textContent = `${n}/${people.length} birthdays set`;
+  }
+
+  function card(p) {
+    const has = p.month > 0 && p.day > 0;
+    const c = document.createElement("div"); c.className = "card" + (has ? "" : " nodate");
+    if (!has) { const d = document.createElement("span"); d.className = "dot"; d.textContent = "no date"; c.append(d); }
+
+    const fr = document.createElement("div"); fr.className = "frame";
+    const url = photoFor(p.name);
+    const img = document.createElement("img");
+    img.alt = p.name; img.referrerPolicy = "no-referrer"; img.draggable = false;
+    const empty = () => { img.remove(); const e = document.createElement("div"); e.className = "empty"; e.textContent = "📷"; fr.append(e); };
+    if (url) { img.src = url; img.onerror = empty; fr.append(img); } else empty();
+
+    const badge = document.createElement("span"); badge.className = "badge"; badge.hidden = true; fr.append(badge);
+
+    const nm = document.createElement("div"); nm.className = "name"; nm.textContent = p.name;
+
+    const row = document.createElement("div"); row.className = "row";
+    const ms = document.createElement("select"), ds = document.createElement("select");
+    ms.innerHTML = `<option value="0">Month</option>` + MONTHS.map((m, i) => `<option value="${i + 1}">${m}</option>`).join("");
+    const fillDays = () => {
+      const mx = p.month ? MAXD[p.month - 1] : 31;
+      ds.innerHTML = `<option value="0">Day</option>` + Array.from({ length: mx }, (_, i) => `<option value="${i + 1}">${i + 1}</option>`).join("");
+      if (p.day > mx) p.day = mx;
+      ds.value = String(p.day || 0);
+    };
+    ms.value = String(p.month || 0); fillDays();
+    ms.onchange = () => { p.month = +ms.value; if (!p.month) p.day = 0; fillDays(); changed(); refreshDot(); };
+    ds.onchange = () => { p.day = +ds.value; changed(); refreshDot(); };
+    row.append(ms, ds);
+
+    const zr = document.createElement("div"); zr.className = "zoomrow";
+    const zin = document.createElement("input"); zin.type = "range"; zin.min = 1; zin.max = 3; zin.step = 0.05;
+    const zb = document.createElement("b");
+    zr.append(document.createTextNode("zoom"), zin, zb);
+
+    const tools = document.createElement("div"); tools.className = "tools";
+    const bAuto = document.createElement("button"); bAuto.type = "button"; bAuto.textContent = "🎯 detect face";
+    const bRes = document.createElement("button"); bRes.type = "button"; bRes.textContent = "reset";
+    tools.append(bAuto, bRes);
+
+    const code = document.createElement("div"); code.className = "meta";
+    const codeTxt = document.createElement("code"); code.append(codeTxt);
+
+    function upd() {
+      img.style.objectPosition = `${p.x}% ${p.y}%`;
+      img.style.transformOrigin = ORIGIN;
+      img.style.transform = p.z > 1 ? `scale(${p.z})` : "none";
+      zin.value = p.z; zb.textContent = (Math.round(p.z * 100) / 100) + "×";
+      codeTxt.textContent = posStr(p) + (p.z > 1 ? "  ·  " + p.z + "×" : "");
+      if (p.det === "ok") { badge.textContent = "face ✓"; badge.className = "badge"; badge.hidden = false; }
+      else if (p.det) { badge.textContent = p.det; badge.className = "badge bad"; badge.hidden = false; }
+      else badge.hidden = true;
+    }
+    p._upd = upd; upd();
+
+    zin.oninput = () => { p.z = +zin.value; p.det = ""; upd(); changed(); };
+    bRes.onclick = () => { p.x = 50; p.y = 22; p.z = 1; p.det = ""; upd(); changed(); };
+    bAuto.onclick = async () => {
+      bAuto.disabled = true; bAuto.textContent = "…";
+      try { await ensureModel(); await detect(p); changed(); }
+      catch (e) { p.det = e.message.slice(0, 28); alert(p.name + ": " + e.message); }
+      bAuto.disabled = false; bAuto.textContent = "🎯 detect face"; upd();
+    };
+
+    function refreshDot() {
+      const ok = p.month > 0 && p.day > 0;
+      c.classList.toggle("nodate", !ok);
+      const d = c.querySelector(".dot");
+      if (ok && d) d.remove();
+      if (!ok && !d) { const e = document.createElement("span"); e.className = "dot"; e.textContent = "no date"; c.prepend(e); }
+      updateStat();
+    }
+
+    let drag = null;
+    fr.addEventListener("pointerdown", e => {
+      if (!img.naturalWidth) return;
+      fr.setPointerCapture(e.pointerId);
+      const W = fr.clientWidth, H = fr.clientHeight;
+      const s = Math.max(W / img.naturalWidth, H / img.naturalHeight);
+      drag = { sx: e.clientX, sy: e.clientY, x: p.x, y: p.y, ox: img.naturalWidth * s - W, oy: img.naturalHeight * s - H };
+    });
+    fr.addEventListener("pointermove", e => {
+      if (!drag) return;
+      const z = Math.max(1, p.z);
+      if (drag.ox > 1) p.x = clamp(drag.x - (e.clientX - drag.sx) / z / drag.ox * 100, 0, 100);
+      if (drag.oy > 1) p.y = clamp(drag.y - (e.clientY - drag.sy) / z / drag.oy * 100, 0, 100);
+      p.det = ""; upd();
+    });
+    const end = () => { if (drag) { drag = null; changed(); } };
+    fr.addEventListener("pointerup", end); fr.addEventListener("pointercancel", end);
+
+    c.append(fr, nm, row, zr, tools, code);
+    return c;
+  }
+
+  $("#autoall").onclick = async () => {
+    if (!confirm("Run face detection on every photo? This overwrites the current positions.")) return;
+    const btn = $("#autoall"); btn.disabled = true;
+    try { $("#prog").textContent = "loading face model…"; await ensureModel(); }
+    catch (e) { $("#prog").textContent = ""; btn.disabled = false; alert(e.message); return; }
+    let ok = 0, i = 0;
+    for (const p of people) {
+      i++; $("#prog").textContent = `detecting ${i}/${people.length}…`;
+      try { await detect(p); ok++; } catch (e) { p.x = 50; p.y = 22; p.z = 1; p.det = e.message.slice(0, 28); }
+      if (p._upd) p._upd();
+    }
+    changed(); btn.disabled = false;
+    $("#prog").textContent = `done: ${ok}/${people.length} faces found — check the red ones by hand`;
+  };
+
+  function build() {
+    const pad = (s, n) => s + " ".repeat(Math.max(0, n - s.length));
+    const w = Math.max(...people.map(p => JSON.stringify(p.name).length), 10);
+    const lines = people.map(p => {
+      const bd = p.month > 0 && p.day > 0 ? String(p.month).padStart(2, "0") + "-" + String(p.day).padStart(2, "0") : "";
+      const z = p.z > 1 ? `, "zoom": ${Math.round(p.z * 100) / 100}` : "";
+      return `    { "name": ${pad(JSON.stringify(p.name) + ",", w + 1)} "birthday": ${JSON.stringify(bd)}, "photoPos": ${JSON.stringify(posStr(p))}${z} }`;
+    });
+    return `{\n  "_comment": ${JSON.stringify(meta._comment)},\n  "tz": ${JSON.stringify(meta.tz)},\n  "classNo": ${meta.classNo},\n  "window": ${meta.window},\n  "people": [\n${lines.join(",\n")}\n  ]\n}\n`;
+  }
+  const say = t => { $("#msg").textContent = t; setTimeout(() => $("#msg").textContent = "", 3500); };
+  $("#dl").onclick = () => {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([build()], { type: "application/json" }));
+    a.download = "birthdays.json"; a.click(); URL.revokeObjectURL(a.href);
+    dirty = false; say("Downloaded ✔ — replace birthdays.json on your site");
+  };
+  $("#cp").onclick = async () => { try { await navigator.clipboard.writeText(build()); say("Copied ✔"); } catch (e) { say("Copy blocked — use Download"); } };
+  $("#allreset").onclick = () => { if (confirm("Reset every photo to the default framing?")) { people.forEach(p => { p.x = 50; p.y = 22; p.z = 1; p.det = ""; }); changed(); render(); } };
+  $("#q").oninput = render; $("#flt").onchange = render;
+  function changed() { dirty = true; }
+  addEventListener("beforeunload", e => { if (dirty) { e.preventDefault(); e.returnValue = ""; } });
+
+  autoLoad();
+})();
+</script>
+</body>
+</html>
