@@ -16,12 +16,12 @@
     {"name":"Abdelrahman Eslam","birthday":"07-15","photoPos":"auto","y":1.5,"zoom":1.1},
     {"name":"Youssef Mohamed","birthday":"02-02","photoPos":"auto","x":1.3,"y":-15.5,"zoom":1.6},
     {"name":"Menna Waleed","birthday":"11-23","photoPos":"auto","x":-0.7,"y":-26.3,"zoom":1.2},
-    {"name":"Youssef Wael","birthday":"","photoPos":"auto","x":3.9,"y":3.6,"zoom":1.2},
+    {"name":"Youssef Wael","birthday":"08-30","photoPos":"auto","x":3.9,"y":3.6,"zoom":1.2},
     {"name":"Zeina Ahmed","birthday":"04-04","photoPos":"auto","zoom":1.1},
     {"name":"Abdullah Hesham","birthday":"04-21","photoPos":"auto","x":0.6,"y":1,"zoom":1.9},
     {"name":"Rodine Mohamed","birthday":"01-25","photoPos":"auto"},
     {"name":"Khalid Mohammad","birthday":"10-02","photoPos":"auto"},
-    {"name":"Kareem Moutaz","birthday":"","photoPos":"auto","x":5.8,"y":4.7,"zoom":1.2},
+    {"name":"Kareem Moutaz","birthday":"10-26","photoPos":"auto","x":5.8,"y":4.7,"zoom":1.2},
     {"name":"Youssef Tarek","birthday":"08-05","photoPos":"auto","zoom":1.3},
     {"name":"Nabil Mahmoud","birthday":"07-18","photoPos":"auto","x":3.2,"y":-8.3,"zoom":1.5},
     {"name":"Maisan Mohamed","birthday":"","photoPos":"auto","zoom":1.3},
@@ -31,7 +31,7 @@
     {"name":"Yahia Eldemairy","birthday":"07-07","photoPos":"auto"},
     {"name":"Lojy Sherif","birthday":"01-13","photoPos":"auto","y":-25.9},
     {"name":"Ayten Mohamed","birthday":"07-12","photoPos":"auto","x":5.8,"y":-16,"zoom":1.2},
-    {"name":"Jumana Adel","birthday":"","photoPos":"auto","zoom":1.25},
+    {"name":"Jumana Adel","birthday":"06-21","photoPos":"auto","zoom":1.25},
     {"name":"Yassin Nader","birthday":"09-08","photoPos":"auto"},
     {"name":"Mohamed Essam","birthday":"08-29","photoPos":"auto"}
   ]
