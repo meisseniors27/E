@@ -12,8 +12,6 @@ window.SITE={startDate:"2026-09-12T08:00:00",countdowns:[{id:"exam",label:"Final
 
      ["photos/r1794611599619-3f4b0b.jpg", ""],
 
-     ["photos/r1794647340384-e8667e.jpg", ""],
-
      ["photos/r1794611604767-7bb744.jpg", ""],
 
      ["photos/r1794611594597-02706c.jpg", ""],
