@@ -47,6 +47,8 @@ window.SITE = {
 
   /* ---------- RANDOMS (Weekly Drops / Ta3feelat) ---------- */
   randoms: [
+     ["photos/r1794680691561-5a68d5.jpg", ""],
+
      ["photos/r1794680667380-e55998.jpg", ""],
 
      ["photos/r1794611599619-3f4b0b.jpg", ""],
