@@ -15,10 +15,13 @@
   const idOf = s => String(s || "").trim().toLowerCase().replace(/\s+/g, " ");
   const $ = (s, r = document) => r.querySelector(s);
 
+  // Inside the Android app (MEIS27.apk) the phone itself handles notifications
+  const native = window.MeisNative || null;
+
   window.OneSignalDeferred = window.OneSignalDeferred || [];
   const withOS = fn => window.OneSignalDeferred.push(fn);
 
-  withOS(async OneSignal => {
+  if (!native) withOS(async OneSignal => {
     try {
       await OneSignal.init({
         appId: APP_ID,
@@ -126,6 +129,7 @@
   function setMsg(t) { const m = $(".nmsg", card); if (m) m.textContent = t; }
 
   async function status() {
+    if (native) { try { return native.status(); } catch (e) { return "off"; } }
     return new Promise(resolve => withOS(async OneSignal => {
       try {
         if (!OneSignal.Notifications.isPushSupported()) {
@@ -139,11 +143,30 @@
     }));
   }
 
+  function nativeTurnOn(name) {
+    try { native.turnOn(idOf(name)); }
+    catch (e) { render("off", "Something went wrong. Close the app, open it again and retry."); return; }
+    let tries = 0;
+    const t = setInterval(() => {
+      tries++;
+      let s = "off";
+      try { s = native.status(); } catch (e) {}
+      if (s === "on") {
+        clearInterval(t);
+        render("on", "Done! Tap “Send me a test” to check it works.");
+      } else if (tries >= 120) {
+        clearInterval(t);
+        render("off", "No permission given. Open your phone Settings → Apps → MEIS '27 → Notifications, allow them, then try again.");
+      }
+    }, 500);
+  }
+
   function turnOn() {
     const name = currentName();
     if (!name) return;
     const btn = $(".nbtn", card); if (btn) btn.disabled = true;
     setMsg("Asking your device…");
+    if (native) { nativeTurnOn(name); return; }
     withOS(async OneSignal => {
       try {
         await OneSignal.login(idOf(name));
@@ -162,6 +185,11 @@
   }
 
   function turnOff() {
+    if (native) {
+      try { native.turnOff(); } catch (e) {}
+      render("off", "Notifications are off on this device.");
+      return;
+    }
     withOS(async OneSignal => {
       try { await OneSignal.User.PushSubscription.optOut(); } catch (e) {}
       render("off", "Notifications are off on this device.");
@@ -196,7 +224,10 @@
     const st = await status();
     render(st);
     // already allowed on this device -> quietly keep it linked to this person
-    if (st === "on") withOS(async OneSignal => { try { await OneSignal.login(idOf(currentName())); } catch (e) {} });
+    if (st === "on") {
+      if (native) { try { native.login(idOf(currentName())); } catch (e) {} }
+      else withOS(async OneSignal => { try { await OneSignal.login(idOf(currentName())); } catch (e) {} });
+    }
   }
 
   function boot() {
