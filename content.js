@@ -1,4 +1,6 @@
 window.SITE={startDate:"2026-09-12T08:00:00",countdowns:[{id:"exam",label:"Final Exam",date:"2027-07-21T09:00:00",sub:"until the final exam (a little.)",joke:"Every second brings us closer. Also closer to exams. Sorry.",done:"The exams are over. Breathe. Hydrate. Never speak of it."}],countdownTitle:"The Final Countdown",countdownSub:"Every second brings us closer.",enterTitle:"Enter our home",enterSub:"Explore our life.",welcome:"Welcome in the home of our memories",warning:"warning: contains pure legends",bubble:"Yes, we are graduating.",groupPhoto:"photos/group.jpg",groupCaption:"the whole crew (on a good day)",band:["SCAN. SMILE. REMEMBER.","STILL HERE, STILL ICONIC","NO TEACHERS WERE HARMED"],rules:["Smile.","Do not judge the baby photos.","Be nice in the secret mail."],excuses:["My alarm went off. I went off too.","I was fighting a very rude pigeon.","My bed filed a restraining order against me.","The bus was late. I was also late. Teamwork.","I got lost in my own house.","Traffic. (I was in the traffic. I was the traffic.)","I was emotionally preparing for the day. It took 40 minutes.","Mercury is in retrograde. Allegedly."],randoms:[
+     ["photos/r1794611599619-3f4b0b.jpg", ""],
+
      ["photos/r1794611594597-02706c.jpg", ""],
 
      ["photos/r1794611587772-a143be.jpg", ""],
