@@ -60,3 +60,14 @@
 .hero-splash::before{content:"";position:absolute;left:0;right:0;top:50%;aspect-ratio:1600/1000;z-index:1;pointer-events:none;background:var(--hphoto,url("photos/group.jpg")) center/cover no-repeat;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 10%,#000 90%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 10%,#000 90%,transparent 100%);transform:translateY(-40%)}
 .hero-splash::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(180deg,rgba(4,8,20,.78) 0%,rgba(4,8,20,.30) 20%,rgba(4,8,20,0) 40%,rgba(4,8,20,0) 60%,rgba(4,8,20,.32) 80%,rgba(4,8,20,.84) 100%)}
 }
+/* ==== hero mobile v5: toolbar فوق فيها MEIS SENIORS '27 + كلام أكبر ونازل + الصورة في نص الشاشة ==== */
+@media (orientation:portrait) and (max-width:1024px){
+.hero-splash{padding-top:0}
+.hero-badge{position:fixed;top:0;left:0;right:0;z-index:12;justify-content:center;width:100%;max-width:none;border-radius:0;border:0;border-bottom:2px solid #ffffff38;background:linear-gradient(90deg,#a87d0f,#ffc83d 28%,#ffdf7e 50%,#ffc83d 72%,#a87d0f);padding:calc(10px + env(safe-area-inset-top)) 16px 10px;font-size:clamp(12px,3.2vw,15px);letter-spacing:.2em;box-shadow:0 10px 30px #000a}
+.hero-welcome{margin:calc(15vh + env(safe-area-inset-top)) 0 0;font-size:clamp(3.2rem,13.6vw,4.6rem);white-space:nowrap}
+.hero-names{margin-top:10px}
+.hn-meis{font-size:clamp(2.4rem,11vw,4rem)}
+.hn-sen{font-size:clamp(1.8rem,7.6vw,2.6rem)}
+.hero-quote{margin-top:14px;font-size:clamp(.98rem,4vw,1.18rem);color:#f2f6ff}
+.hero-splash::before{transform:translateY(-33%)}
+}
