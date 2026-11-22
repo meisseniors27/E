@@ -4,7 +4,7 @@
   "classNo": 27,
   "window": 30,
   "people": [
-    {"name":"Eyad Taha","birthday":"01-01","photoPos":"auto","y":-4.7,"zoom":1.2},
+    {"name":"Eyad Taha","birthday":"11-22","photoPos":"auto","y":-4.7,"zoom":1.2},
     {"name":"Sodfa Mohamed","birthday":"12-16","photoPos":"auto"},
     {"name":"Fajr Mohamed","birthday":"04-16","photoPos":"auto","x":3.9,"y":-10.4,"zoom":1.2},
     {"name":"Jamila Amr","birthday":"12-03","photoPos":"auto","x":-1.3,"y":-10.9},
